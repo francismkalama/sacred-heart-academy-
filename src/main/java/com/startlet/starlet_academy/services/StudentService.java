@@ -17,22 +17,15 @@ import java.util.Optional;
 
 @Service
 public class StudentService {
-
-
     private final StudentRepository studentRepository;
-
-
     private final ParentRepository parentRepository;
     private final EnrollmentRepository enrollmentRepository;
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository) {
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
         this.enrollmentRepository = enrollmentRepository;
     }
-
     public Student  addStudent(Student student, List<Parent> parentsData, List<Enrollment> enrollmentData) {
         Student savedStudent = studentRepository.save(student);
         for (Parent parent : parentsData) {

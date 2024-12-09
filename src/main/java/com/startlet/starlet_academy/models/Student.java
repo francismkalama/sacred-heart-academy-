@@ -1,6 +1,7 @@
 package com.startlet.starlet_academy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.startlet.starlet_academy.models.Institution.Fee;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,6 +42,8 @@ public class Student {
     @JsonIgnore
     @OneToMany(mappedBy = "student",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Fee> fees;
 //    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    private List<Grade> grades;
 //    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
