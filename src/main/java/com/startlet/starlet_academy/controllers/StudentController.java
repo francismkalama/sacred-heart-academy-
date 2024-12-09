@@ -68,4 +68,9 @@ public class StudentController {
         Page<Student> studentsPage = studentService.getStudentList(pageable);
         return ResponseEntity.ok(studentsPage);
     }
+    @PutMapping("/{studentId}")
+    public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
+        Student studentData = studentService.updateStudent(studentId,student);
+        return ResponseEntity.ok(studentData);
+    }
 }

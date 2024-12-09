@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -68,5 +69,34 @@ public class StudentService {
 
     public Page<Student> getStudentList(Pageable pageable){
         return studentRepository.findAllStudents(pageable);
+    }
+
+    public Student updateStudent(long studentId, Student student) {
+        Student existingStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setDateOfBirth(student.getDateOfBirth());
+        existingStudent.setGender(student.getGender());
+        existingStudent.setAddressCity(student.getAddressCity());
+        existingStudent.setAddressState(student.getAddressState());
+        existingStudent.setAddressPostalCode(student.getAddressPostalCode());
+        existingStudent.setAddressStreet(student.getAddressStreet());
+
+        if (student.getParents()!=null){
+            List<Parent> parentsData = student.getParents().stream()
+                    .map(prnt -> parentRepository.findById(prnt.getParentId())
+                    .orElseThrow(() -> new RuntimeException("Parent not found: " + prnt.getParentId())))
+                    .collect(Collectors.toList());
+
+        }
+        if (student.getEnrollments() != null){
+            List<Enrollment> enrollmentsData = student.getEnrollments().stream()
+                            .map(enrollment -> enrollmentRepository.findById(enrollment.getEnrollmentId())
+                                    .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
+                    .collect(Collectors.toList());
+        }
+
+        return studentRepository.save(existingStudent);
     }
 }

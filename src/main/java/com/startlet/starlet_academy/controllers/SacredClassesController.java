@@ -16,7 +16,7 @@ public class SacredClassesController {
     @PostMapping("create")
     public ResponseEntity<SacredClass> addClass(@RequestBody SacredClass classEntity) {
         return ResponseEntity.ok(sacredClassesService.addClass(classEntity));
-    }    @GetMapping
+    }    @GetMapping("class_list")
     public ResponseEntity<List<SacredClass>> getAllSacredClasses() {
         return ResponseEntity.ok(sacredClassesService.getAllClasses());
     }

@@ -33,7 +33,7 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
     public List<Fee> getFeesByStudentId(long studentId) {
         return feeRepository.findByStudentStudentId(studentId);
     }
-    public Fee createFee(int studentId, Fee fee) {
+    public Fee createFee(long studentId, Fee fee) {
         // Fetch the student
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
