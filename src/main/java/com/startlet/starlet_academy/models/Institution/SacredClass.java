@@ -17,17 +17,13 @@ public class SacredClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "class_id")
     private long classId;
-
+    @Column(unique = true)
     private String className;
-
     @OneToOne
     @JoinColumn(name = "teacher_id")
     private Teacher classTeacher;
-
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Course> courses;
-
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Enrollment> enrollments;
-
 }

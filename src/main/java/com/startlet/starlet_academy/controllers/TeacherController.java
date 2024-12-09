@@ -31,4 +31,9 @@ public class TeacherController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @PutMapping("/{teacherId}")
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable int teacherId,@RequestBody Teacher updatedTeacher) {
+        Teacher teacher = teacherService.updateTeacher(teacherId, updatedTeacher);
+        return ResponseEntity.ok(teacher);
+    }
 }
