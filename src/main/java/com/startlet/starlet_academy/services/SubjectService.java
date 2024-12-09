@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
-
     @Transactional
     public Subject addSubject(String name) {
         Subject subject = new Subject();
