@@ -35,7 +35,7 @@ logger.info("Registration request {}",user.getUsername());
         return userService.authenticate(user.getUsername(), user.getPassword());
     }
     @GetMapping("user_list")
-    public  ResponseEntity<Page<UserDTO>> getUsers(@PageableDefault(size = 2,sort = "id")Pageable pageable){
+    public  ResponseEntity<Page<UserDTO>> getUsers(@PageableDefault(size = 100,sort = "id")Pageable pageable){
         Page<UserDTO> users = userService.getUsers(pageable);
         return ResponseEntity.ok(users);
     }
