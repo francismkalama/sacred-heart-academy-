@@ -15,6 +15,7 @@ public class Users{
     private String password;
     @Column(nullable = false)
     private boolean profile_status;
+    private String name;
     @Column(nullable = false)
     private String user_role;
 }

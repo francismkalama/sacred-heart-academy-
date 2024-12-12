@@ -1,5 +1,6 @@
 package com.startlet.starlet_academy.models.Institution;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.startlet.starlet_academy.enums.FeeStatus;
 import com.startlet.starlet_academy.models.Student;
 import jakarta.persistence.*;
@@ -24,12 +25,15 @@ public class Fee {
 
     @Enumerated(EnumType.STRING)
     private FeeStatus status;
+    private String feeDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
+    @JsonIgnore
     private Student student;
 
     @OneToMany(mappedBy = "fee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Payment> payments;
 
     // Getters and Setters

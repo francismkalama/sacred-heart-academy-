@@ -50,4 +50,9 @@ public class FeeController {
         List<Payment> payments = feeService.getPaymentsByFeeId(feeId);
         return ResponseEntity.ok(payments);
     }
+    @PutMapping("/amend/{feeId}")
+    public ResponseEntity<Fee> updateFee(@PathVariable long feeId, @RequestBody Fee updatedFee) {
+        Fee fee = feeService.updateFee(feeId, updatedFee);
+        return ResponseEntity.ok(fee);
+    }
 }

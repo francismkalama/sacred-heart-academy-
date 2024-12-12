@@ -31,18 +31,26 @@ public class StudentService {
         Student savedStudent = studentRepository.save(student);
         for (Parent parent : parentsData) {
             parent.setStudent(savedStudent);
-            parentRepository.save(parent);
+            try{
+                parentRepository.save(parent);
+                logger.info("Parent Data saved successfully");
+            }catch (Exception e){
+                logger.error("Error Saving parent {}",e.getMessage());
+            }
         }
         for (Enrollment enrollment : enrollmentData) {
             enrollment.setStudent(savedStudent);
-            enrollmentRepository.save(enrollment);
+            try {
+                enrollmentRepository.save(enrollment);
+                logger.info("Enrollment Data saved successfully");
+            }catch (Exception e){
+                logger.error("Error Saving enrollment  {}",e.getMessage());
+            }
         }
         return savedStudent;
     }
     public StudentDTO getStudentById(int studentId) {
         StudentDTO studentDTO = new StudentDTO();
-        // Use the findById method from the repository to fetch the student
-//        Optional<Student> student = studentRepository.findById(studentId);
         Optional<Student> student = studentRepository.findStudentsWithParents(studentId);
         // Check if the student exists
         if (student.isPresent()) {
@@ -63,7 +71,9 @@ public class StudentService {
             studentDTO.setParents(genParentData);
             return studentDTO;  // Return the student if found
         } else {
-            throw new RuntimeException("Student not found with ID: " + studentId);
+            logger.error("Student not found with ID: " + studentId);
+//            throw new RuntimeException("Student not found with ID: " + studentId);
+            return studentDTO;
         }
     }
 
@@ -98,5 +108,9 @@ public class StudentService {
         }
 
         return studentRepository.save(existingStudent);
+    }
+
+    public long getStudentCount() {
+        return studentRepository.count();
     }
 }

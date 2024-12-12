@@ -1,7 +1,9 @@
 package com.startlet.starlet_academy.controllers;
 
+import com.startlet.starlet_academy.models.Student;
 import com.startlet.starlet_academy.models.User;
 import com.startlet.starlet_academy.models.UserDTO;
+import com.startlet.starlet_academy.models.Users;
 import com.startlet.starlet_academy.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -42,6 +44,22 @@ logger.info("Registration request {}",user.getUsername());
     public ResponseEntity<String> deactivateUser(@PathVariable String username) {
         userService.deactivateUser(username);
         return ResponseEntity.ok("User deactivated successfully.");
+    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody User user){
+        UserDTO userUpdateResponse = userService.updateUser(userId,user);
+        return ResponseEntity.ok(userUpdateResponse);
+    }
+
+    @GetMapping("user_count")
+    public  ResponseEntity<Long> getUsersCount(){
+        long  countOfusers = userService.getUsersCount();
+        return ResponseEntity.ok(countOfusers);
+    }
+    @GetMapping("/{userId}")
+    public  ResponseEntity<UserDTO> getUser(@PathVariable long userId){
+        UserDTO  countOfusers = userService.getUser(userId);
+        return ResponseEntity.ok(countOfusers);
     }
 
 }

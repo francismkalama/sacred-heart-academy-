@@ -59,6 +59,7 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
         payment.setPaymentDate(LocalDate.now());
         payment.setPaymentMode(paymentData.getPaymentMode());
         payment.setPaymentReference(paymentData.getPaymentReference());
+        payment.setPaymentFor(paymentData.getPaymentFor());
         paymentRepository.save(payment);
 
         // Update fee
@@ -69,12 +70,40 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
         } else {
             fee.setStatus(FeeStatus.PARTIAL);
         }
-
         feeRepository.save(fee);
         return payment;
     }
 
     public List<Payment> getPaymentsByFeeId(int feeId) {
         return paymentRepository.findByFeeFeeId(feeId);
+    }
+
+    public Fee updateFee(long feeId, Fee updatedFee) {
+        String paymentDesc= null;
+        // Find the existing fee record
+        Fee existingFee = feeRepository.findById(feeId)
+                .orElseThrow(() -> new RuntimeException("Fee not found for ID: " + feeId));
+        //compare fees
+            if(existingFee.getPaidAmount().compareTo(BigDecimal.valueOf(0)) == 0){
+                existingFee.setStatus(FeeStatus.UNPAID);
+                paymentDesc = String.valueOf(FeeStatus.UNPAID).substring(0,1).toUpperCase()+String.valueOf(FeeStatus.UNPAID).substring(1).toLowerCase()+" payment";
+                existingFee.setFeeDescription(paymentDesc);
+        }else if(existingFee.getPaidAmount().compareTo(updatedFee.getFeeAmount()) <0){
+                existingFee.setStatus(FeeStatus.PARTIAL);
+                paymentDesc = String.valueOf(FeeStatus.PARTIAL).substring(0,1).toUpperCase()+String.valueOf(FeeStatus.PARTIAL).substring(1).toLowerCase()+" payment";
+                existingFee.setFeeDescription(paymentDesc);
+        }else{
+                existingFee.setStatus(FeeStatus.PAID);
+                paymentDesc = String.valueOf(FeeStatus.PAID).substring(0,1).toUpperCase()+String.valueOf(FeeStatus.PAID).substring(1).toLowerCase()+" payment";
+                existingFee.setFeeDescription(paymentDesc);
+            }
+        existingFee.setFeeAmount(updatedFee.getFeeAmount());
+        existingFee.setDueDate(updatedFee.getDueDate());
+        // Update other details if needed (optional)
+        if (updatedFee.getFeeDescription() != null) {
+            existingFee.setFeeDescription(updatedFee.getFeeDescription());
+        }
+        // Save the updated fee
+        return feeRepository.save(existingFee);
     }
 }

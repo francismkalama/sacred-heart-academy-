@@ -27,7 +27,7 @@ public class StudentController {
     @PostMapping("/add")
     public Student addStudent(@RequestBody StudentDTO studentDTO){
         Student student = new Student();
-        logger.info("Add students Requests {}",new Gson().toJson(studentDTO));
+        logger.info("Received Add students Requests {}",new Gson().toJson(studentDTO));
         student.setFirstName(studentDTO.getFirstName());
         student.setLastName(studentDTO.getLastName());
         student.setDateOfBirth(new Date(studentDTO.getDateOfBirth())); // Example, convert from timestamp
@@ -72,5 +72,10 @@ public class StudentController {
     public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
         Student studentData = studentService.updateStudent(studentId,student);
         return ResponseEntity.ok(studentData);
+    }
+    @GetMapping("/student_count")
+    public ResponseEntity<Long> getStudentsCount() {
+        long studentsCount = studentService.getStudentCount();
+        return ResponseEntity.ok(studentsCount);
     }
 }
