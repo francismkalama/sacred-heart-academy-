@@ -93,6 +93,21 @@ public class StudentService {
         existingStudent.setAddressPostalCode(student.getAddressPostalCode());
         existingStudent.setAddressStreet(student.getAddressStreet());
 
+        List<Parent> parentsList = student.getParents();
+        if(parentsList != null && !parentsList.isEmpty()){
+            List<Parent> updatedParents = new ArrayList<>();
+            for (Parent parent:parentsList){
+                Parent parentObj = student.getParents()
+                        .stream()
+                        .filter(p -> p.getParentId() == parent.getParentId()) // Check for existing parent by ID
+                        .findFirst()
+                        .orElse(new Parent());
+                parentObj.setName(parent.getName());
+
+            }
+
+        }
+
         if (student.getParents()!=null){
             List<Parent> parentsData = student.getParents().stream()
                     .map(prnt -> parentRepository.findById(prnt.getParentId())
