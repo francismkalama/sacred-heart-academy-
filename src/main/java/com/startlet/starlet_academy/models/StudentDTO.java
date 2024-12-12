@@ -2,13 +2,14 @@ package com.startlet.starlet_academy.models;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
 public class StudentDTO {
     private String firstName;
     private String lastName;
-    private long dateOfBirth;
+    private Date dateOfBirth;
     private String gender;
     private String addressStreet;
     private String addressCity;

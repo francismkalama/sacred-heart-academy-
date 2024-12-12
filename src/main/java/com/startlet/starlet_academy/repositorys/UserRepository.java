@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByUsername(String username);
 //    @Query(value = "SELECT * FROM Users u WHERE u.username = :username AND u.profile_status = 'true' ",nativeQuery = true)
 //    Optional<Users>findByActiveUserProfile(String username);
-    @Query(value = "SELECT id,username,user_role,profile_status FROM users",nativeQuery = true)
+    @Query(value = "SELECT id,username,user_role,profile_status,name FROM users",nativeQuery = true)
     Page<Object[]> findAllUsers(Pageable pageable);
 
     @Modifying
