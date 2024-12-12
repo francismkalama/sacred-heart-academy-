@@ -18,7 +18,7 @@ public class EnrollmentService {
     private StudentRepository studentRepository;
 
     @Transactional
-    public Enrollment addEnrollment(int studentId, String className, String section, Date enrollmentDate, String status) {
+    public Enrollment addEnrollment(long studentId, String className, String section, Date enrollmentDate, String status) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 

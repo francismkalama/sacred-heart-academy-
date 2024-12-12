@@ -1,5 +1,6 @@
 package com.startlet.starlet_academy.models;
 
+import com.startlet.starlet_academy.models.Institution.SacredClass;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,10 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private SacredClass classEntity;
 
     @Column(name = "class")
     private String className;

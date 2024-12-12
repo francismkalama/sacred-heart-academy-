@@ -23,7 +23,7 @@ public class GradeService {
     private SubjectRepository subjectRepository;
 
     @Transactional
-    public Grade addGrade(int studentId, int subjectId, String term, int score) {
+    public Grade addGrade(long studentId, int subjectId, String term, int score) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         Subject subject = subjectRepository.findById(subjectId)

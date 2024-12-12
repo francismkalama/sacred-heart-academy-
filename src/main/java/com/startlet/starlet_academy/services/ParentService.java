@@ -16,7 +16,7 @@ public class ParentService {
     @Autowired
     private StudentRepository studentRepository;
     @Transactional
-    public Parent addParent(int studentId, String name, String relationship, String phone, String email) {
+    public Parent addParent(long studentId, String name, String relationship, String phone, String email) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         Parent parent = new Parent();
