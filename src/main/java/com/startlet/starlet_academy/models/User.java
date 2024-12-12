@@ -13,7 +13,6 @@ public class User {
     private String username;
     @NotBlank
     private String password;
-
+    @NotBlank
     private String role;
-    private String name;
 }

@@ -1,5 +1,6 @@
 package com.startlet.starlet_academy.models.Institution;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,10 +19,12 @@ public class Payment {
     private BigDecimal paymentAmount;
     private LocalDate paymentDate;
     private String paymentMode;
+    private String paymentFor;
     @Column(unique = true)
     private String paymentReference;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_id")
+    @JsonIgnore
     private Fee fee;
 
 }

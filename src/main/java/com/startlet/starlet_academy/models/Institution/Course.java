@@ -1,5 +1,6 @@
 package com.startlet.starlet_academy.models.Institution;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.startlet.starlet_academy.models.Institution.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,10 +19,12 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
+    @JsonIgnore
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
+    @JsonIgnore
     private SacredClass classEntity;
 
     // Getters and Setters

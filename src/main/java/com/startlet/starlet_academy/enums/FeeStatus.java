@@ -8,5 +8,6 @@ import lombok.Getter;
 public enum FeeStatus {
         PAID,
     PARTIAL,
-    UNPAID
+    UNPAID,
+    OVERPAID
 }
