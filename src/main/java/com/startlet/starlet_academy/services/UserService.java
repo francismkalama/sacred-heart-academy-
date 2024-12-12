@@ -34,6 +34,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setProfile_status(true);
         user.setUser_role(requestUser.getRole().toLowerCase());
+        user.setName(requestUser.getName());
         userRepository.save(user);
     }
 
@@ -62,6 +63,7 @@ public class UserService {
             userResponseDTO.setUsername((String) records[1]);
             userResponseDTO.setRole((String) records[2]);
             userResponseDTO.setProfileStatus((Boolean) records[3]);
+            userResponseDTO.setName((String) records[4]);
             return  userResponseDTO;
         });
     }
