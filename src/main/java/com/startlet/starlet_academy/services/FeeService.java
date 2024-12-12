@@ -106,4 +106,12 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
         // Save the updated fee
         return feeRepository.save(existingFee);
     }
+
+    public double getFeeSum() {
+        return feeRepository.sumFees();
+    }
+
+    public double getPaymentsSum() {
+        return feeRepository.sumPayments();
+    }
 }

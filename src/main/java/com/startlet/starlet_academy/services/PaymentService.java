@@ -29,4 +29,5 @@ public class PaymentService {
     public List<Payment> getPaymentsByFeeId(int feeId) {
         return paymentRepository.findByFeeFeeId(feeId);
     }
+
 }
