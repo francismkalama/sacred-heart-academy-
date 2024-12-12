@@ -1,13 +1,7 @@
 package com.startlet.starlet_academy.controllers;
 
-import com.google.gson.Gson;
-import com.startlet.starlet_academy.enums.FeeStatus;
 import com.startlet.starlet_academy.models.Institution.Fee;
 import com.startlet.starlet_academy.models.Institution.Payment;
-import com.startlet.starlet_academy.models.Student;
-import com.startlet.starlet_academy.models.dataobjects.FeeDTO;
-import com.startlet.starlet_academy.repositorys.FeeRepository;
-import com.startlet.starlet_academy.repositorys.StudentRepository;
 import com.startlet.starlet_academy.services.FeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,4 +47,15 @@ public class FeeController {
         Fee fee = feeService.updateFee(feeId, updatedFee);
         return ResponseEntity.ok(fee);
     }
+    @GetMapping("/total_fee_amount")
+    public ResponseEntity<Double> getTotalFeeAmount() {
+        double total = feeService.getFeeSum();
+        return ResponseEntity.ok(total);
+    }
+    @GetMapping("/total_payed_amount")
+    public ResponseEntity<Double> getTotalFeePayments() {
+        double total = feeService.getPaymentsSum();
+        return ResponseEntity.ok(total);
+    }
+
 }
