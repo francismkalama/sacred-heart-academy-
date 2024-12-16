@@ -25,6 +25,6 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_id")
     @JsonIgnore
-    private Fee fee;
+    private Fees fee;
 
 }

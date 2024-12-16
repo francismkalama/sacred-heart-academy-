@@ -1,7 +1,7 @@
 package com.startlet.starlet_academy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.startlet.starlet_academy.models.Institution.Fee;
+import com.startlet.starlet_academy.models.Institution.Fees;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,13 +19,16 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     private Long Id;
-//    private String admNo;
+    private String admNo;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    private String studentClass;
+    private String term;
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
+    private Date dateOfAdmission;
     @Column(name = "gender")
     private String gender;
     @Column(name = "address_street")
@@ -37,14 +40,14 @@ public class Student {
     @Column(name = "address_postal_code")
     private String addressPostalCode;
     @JsonIgnore
-    @OneToMany(mappedBy = "student",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Parent> parents;
     @JsonIgnore
     @OneToMany(mappedBy = "student",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Fee> fees;
+    private List<Fees> fees;
 //    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    private List<Grade> grades;
 //    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

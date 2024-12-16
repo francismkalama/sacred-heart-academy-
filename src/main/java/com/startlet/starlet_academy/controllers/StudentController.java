@@ -30,7 +30,7 @@ public class StudentController {
         logger.info("Received Add students Requests {}",new Gson().toJson(studentDTO));
         student.setFirstName(studentDTO.getFirstName());
         student.setLastName(studentDTO.getLastName());
-        student.setDateOfBirth(studentDTO.getDateOfBirth()); // Example, convert from timestamp
+        student.setDateOfBirth(new Date(studentDTO.getDateOfBirth())); // Example, convert from timestamp
         student.setGender(studentDTO.getGender());
         student.setAddressStreet(studentDTO.getAddressStreet());
         student.setAddressCity(studentDTO.getAddressCity());
@@ -51,7 +51,7 @@ public class StudentController {
             Enrollment enrollment = new Enrollment();
             enrollment.setClassName(enrollmentDTO.getClassName());
             enrollment.setSection(enrollmentDTO.getSection());
-            enrollment.setEnrollmentDate(enrollmentDTO.getEnrollmentDate()); // Convert from timestamp
+            enrollment.setEnrollmentDate(new Date(enrollmentDTO.getEnrollmentDate())); // Convert from timestamp
             enrollment.setStatus(enrollmentDTO.getStatus());
             enrollmentData.add(enrollment);
         }
