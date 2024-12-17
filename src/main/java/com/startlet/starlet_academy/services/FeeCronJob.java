@@ -40,17 +40,20 @@ public class FeeCronJob {
         Fee feeAnalytics = new Fee();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime currentDateTime = LocalDateTime.now();
-//        logger.info("{} {}",currentDateTime.getYear(),currentDateTime.getMonthValue());
-        BigDecimal totalFeeMonthlyAmount = feesRepository.getTotalFeesAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
-        BigDecimal totalOutstandingMonthlyAmount = feesRepository.getTotalOutstandingAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
-        BigDecimal totalPaidMonthlyAmount = feesRepository.getTotalPaidAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
+        logger.info("{} {}",currentDateTime.getYear(),currentDateTime.getMonthValue());
+        BigDecimal totalFeeMonthlyAmount = feesRepository.getTotalFeesAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue());
+//        logger.info("****{}",totalFeeMonthlyAmount);
+        BigDecimal totalOutstandingMonthlyAmount = feesRepository.getTotalOutstandingAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue());
+//    logger.info("****{}",totalOutstandingMonthlyAmount);
+        BigDecimal totalPaidMonthlyAmount = feesRepository.getTotalPaidAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue());
+//    logger.info("****{}",totalPaidMonthlyAmount);
         feeAnalytics.setFeeMonth(Month.of(currentDateTime.getMonthValue()).name());
-        feeAnalytics.setFeeYear(currentDateTime.getYear());
+        feeAnalytics.setFeeYear(String.valueOf(currentDateTime.getYear()));
         feeAnalytics.setTotalExpected(totalFeeMonthlyAmount);
         feeAnalytics.setTotalPaid(totalPaidMonthlyAmount);
         feeAnalytics.setTotalOutstanding(totalOutstandingMonthlyAmount);
         try{
-           int entryCheck = feesAnalyticsRepository.checkEntryBasedOnMonthandYear(currentDateTime.getYear(),Month.of(currentDateTime.getMonthValue()).name());
+           int entryCheck = feesAnalyticsRepository.checkEntryBasedOnMonthandYear(String.valueOf(currentDateTime.getYear()),Month.of(currentDateTime.getMonthValue()).name());
            if (entryCheck == 0 ){
                feesAnalyticsRepository.save(feeAnalytics);
                logger.info("Fees Analytics updated");
