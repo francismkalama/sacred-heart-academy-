@@ -52,6 +52,7 @@ public class FeeCronJob {
         feeAnalytics.setTotalExpected(totalFeeMonthlyAmount);
         feeAnalytics.setTotalPaid(totalPaidMonthlyAmount);
         feeAnalytics.setTotalOutstanding(totalOutstandingMonthlyAmount);
+        feeAnalytics.setDateCreated(LocalDateTime.now());
         try{
            int entryCheck = feesAnalyticsRepository.checkEntryBasedOnMonthandYear(String.valueOf(currentDateTime.getYear()),Month.of(currentDateTime.getMonthValue()).name());
            if (entryCheck == 0 ){
