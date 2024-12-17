@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Fees_data")
@@ -32,6 +33,8 @@ public class Fees {
     private BigDecimal assessment;
     private BigDecimal extraCurriculum;
     private BigDecimal total;
+    private LocalDateTime dateSaved;
+    private LocalDateTime updatedDate;
 //    private BigDecimal balance;
 //    private LocalDate dueDate;
 

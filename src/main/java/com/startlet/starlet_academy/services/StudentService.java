@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -259,6 +260,7 @@ public Student updateStudent(long studentId, StudentDTO student) {
             fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
             fees.setTransport(feesDTO.getTransport());
             fees.setTotal(paidAmount);
+            fees.setUpdatedDate(LocalDateTime.now());
             updatedFees.add(fees);
         }
 

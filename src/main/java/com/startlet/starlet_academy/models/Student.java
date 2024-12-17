@@ -5,6 +5,7 @@ import com.startlet.starlet_academy.models.Institution.Fees;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Fees> fees;
+    private LocalDateTime dateSaved;
+    private LocalDateTime updatedDate;
 //    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    private List<Grade> grades;
 //    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

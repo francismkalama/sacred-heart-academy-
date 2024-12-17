@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +86,7 @@ public class StudentController {
                 fees.setAdmission(feesDTO.getAdmission());
                 fees.setFeesAmount(feesDTO.getFeesAmount());
                 fees.setTotal(paidAmount);
+                fees.setDateSaved(LocalDateTime.now());
 //                logger.info("Amount {} in words {}", paidAmount,NumberConversion.convertBigDecimal(paidAmount));
                 feeData.add(fees);
             }
