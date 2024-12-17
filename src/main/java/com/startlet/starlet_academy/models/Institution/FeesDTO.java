@@ -17,6 +17,7 @@ public class FeesDTO {
     private BigDecimal computer;
     private BigDecimal exams;
     private BigDecimal assessment;
-    private BigDecimal extraCurriculim;
+    private BigDecimal extraCurriculum;
+    private BigDecimal paidAmount;
     private String amountDesc;
 }

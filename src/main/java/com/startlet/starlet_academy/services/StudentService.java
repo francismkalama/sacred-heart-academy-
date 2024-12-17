@@ -95,6 +95,9 @@ public class StudentService {
         rsParentDataSet.add(parentDTO);
     }
     for (Fees fer: rsFees){
+        BigDecimal paidAmount = fer.getExams().add(fer.getComputer()).add(fer.getAssessment())
+                .add(fer.getExtraCurriculum()).add(fer.getTransport())
+                .add(fer.getTution()).add(fer.getAdmission()).add(fer.getLunch());
         FeesDTO feesDTO = new FeesDTO();
         feesDTO.setFeesAmount(fer.getFeesAmount());
         feesDTO.setComputer(fer.getComputer());
@@ -105,7 +108,8 @@ public class StudentService {
         feesDTO.setTransport(fer.getTransport());
         feesDTO.setTution(fer.getTution());
         feesDTO.setAdmission(fer.getAdmission());
-        feesDTO.setExtraCurriculim(fer.getExtraCurriculum());
+        feesDTO.setExtraCurriculum(fer.getExtraCurriculum());
+        feesDTO.setPaidAmount(paidAmount);
         feesDTO.setAmountDesc(NumberConversion.convertBigDecimal(fer.getTotal()));
         rsFeeDataSet.add(feesDTO);
          }
@@ -237,14 +241,16 @@ public Student updateStudent(long studentId, StudentDTO student) {
     if(feesList != null && !feesList.isEmpty()){
         for (FeesDTO feesDTO:feesList){
             BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
-                    .add(feesDTO.getExtraCurriculim()).add(feesDTO.getTransport())
-                    .add(feesDTO.getTution()).add(feesDTO.getAdmission());
+                    .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
+                    .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
             Fees fees = existingStudent.getFees()
                     .stream()
                     .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
                     .findFirst()
                     .orElse(new Fees());
-            fees.setExtraCurriculum(feesDTO.getExtraCurriculim());
+            fees.setExtraCurriculum(feesDTO.getExtraCurriculum());
+            fees.setAdmission(feesDTO.getAdmission());
+            fees.setAssessment(feesDTO.getAssessment());
             fees.setLunch(feesDTO.getLunch());
             fees.setTution(feesDTO.getTution());
             fees.setFeesAmount(feesDTO.getFeesAmount());
