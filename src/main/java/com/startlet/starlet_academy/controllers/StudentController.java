@@ -69,14 +69,14 @@ public class StudentController {
 //        if(studentDTO.getFees()!=null){
             for (FeesDTO feesDTO : studentDTO.getFees()){
                 BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
-                        .add(feesDTO.getExtraCurriculim()).add(feesDTO.getTransport())
-                        .add(feesDTO.getTution()).add(feesDTO.getAdmission());
+                        .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
+                        .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
                 Fees fees = new Fees();
                 fees.setExams(feesDTO.getExams());
                 fees.setComputer(feesDTO.getComputer());
                 fees.setAssessment(feesDTO.getAssessment());
                 fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
-                fees.setExtraCurriculum(feesDTO.getExtraCurriculim());
+                fees.setExtraCurriculum(feesDTO.getExtraCurriculum());
                 fees.setTransport(feesDTO.getTransport());
                 fees.setTution(feesDTO.getTution());
                 fees.setLunch(feesDTO.getLunch());
