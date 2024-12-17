@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -84,12 +85,14 @@ public class UserService {
     }
     @Transactional
     public UserDTO updateUser(long userId, User updateUser) {
-        String encryptedPassword = passwordEncoder.encode(updateUser.getPassword());
         UserDTO userDTO = new UserDTO();
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
             user.setName(updateUser.getName());
-            user.setPassword(encryptedPassword);
+            if (Objects.nonNull(updateUser.getPassword()) || updateUser.getPassword()!=null){
+                String encryptedPassword = passwordEncoder.encode(updateUser.getPassword());
+                user.setPassword(encryptedPassword);
+            }
             user.setUser_role(updateUser.getRole());
             try{
 

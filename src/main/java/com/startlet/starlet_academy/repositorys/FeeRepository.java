@@ -11,9 +11,10 @@ import java.util.List;
 public interface FeeRepository extends JpaRepository<Fees, Long> {
 @Query(value = "SELECT * FROM Fee f WHERE f.student_id = :studentId",nativeQuery = true)
     List<Fees> findByStudentStudentId(long studentId);
-    @Query(value = "SELECT COALESCE(SUM(f.fee_Amount), 0) FROM Fee f",nativeQuery = true)
+    @Query(value = "SELECT COALESCE(SUM(f.fees_Amount), 0) FROM fees_data f",nativeQuery = true)
     double sumFees();
-    @Query(value = "SELECT COALESCE(SUM(f.paid_Amount), 0) FROM Fee f",nativeQuery = true)
+    @Query(value = "SELECT COALESCE(SUM(f.total), 0) FROM fees_data f",nativeQuery = true)
     double sumPayments();
-//    List<Fee> findByStudentsStudentId(long studentId);
+    @Query(value = "SELECT (SUM(f.fees_Amount) - SUM(f.total)) FROM fees_data f",nativeQuery = true)
+    double sumOutstandingPayments();
 }

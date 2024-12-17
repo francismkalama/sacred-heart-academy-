@@ -1,33 +1,32 @@
-//package com.startlet.starlet_academy.services;
-//
-//import com.startlet.starlet_academy.enums.FeeStatus;
-//import com.startlet.starlet_academy.models.Institution.Fee;
-//import com.startlet.starlet_academy.models.Institution.Fees;
-//import com.startlet.starlet_academy.models.Institution.Payment;
-//import com.startlet.starlet_academy.models.Student;
-//import com.startlet.starlet_academy.repositorys.FeeRepository;
-//import com.startlet.starlet_academy.repositorys.PaymentRepository;
-//import com.startlet.starlet_academy.repositorys.StudentRepository;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDate;
-//import java.util.List;
-//
-//@Service
-//public class FeeService {
-//private Logger log = LoggerFactory.getLogger(this.getClass());
-//    @Autowired
-//    private FeeRepository feeRepository;
-//
-//    @Autowired
-//    private StudentRepository studentRepository;
+package com.startlet.starlet_academy.services;
+
+import com.startlet.starlet_academy.enums.FeeStatus;
+import com.startlet.starlet_academy.models.Institution.Fees;
+import com.startlet.starlet_academy.models.Institution.Payment;
+import com.startlet.starlet_academy.models.Student;
+import com.startlet.starlet_academy.repositorys.FeeRepository;
+import com.startlet.starlet_academy.repositorys.PaymentRepository;
+import com.startlet.starlet_academy.repositorys.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+public class FeeService {
+private Logger log = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private FeeRepository feeRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 //    @Autowired
 //    private PaymentRepository paymentRepository;
-//
+
 //    public Fees addFee(Fees fee) {
 //        return feeRepository.save(fee);
 //    }
@@ -74,11 +73,11 @@
 //        feeRepository.save(fee);
 //        return payment;
 //    }
-//
+
 //    public List<Payment> getPaymentsByFeeId(int feeId) {
 //        return paymentRepository.findByFeeFeeId(feeId);
 //    }
-//
+
 //    public Fee updateFee(long feeId, Fee updatedFee) {
 //        String paymentDesc= null;
 //        // Find the existing fee record
@@ -107,12 +106,14 @@
 //        // Save the updated fee
 //        return feeRepository.save(existingFee);
 //    }
-//
-//    public double getFeeSum() {
-//        return feeRepository.sumFees();
-//    }
-//
-//    public double getPaymentsSum() {
-//        return feeRepository.sumPayments();
-//    }
-//}
+
+    public double getFeeSum() {
+        return feeRepository.sumFees();
+    }
+
+    public double getPaymentsSum() {
+        return feeRepository.sumPayments();
+    }   public double getOutstandingSum() {
+        return feeRepository.sumOutstandingPayments();
+    }
+}
