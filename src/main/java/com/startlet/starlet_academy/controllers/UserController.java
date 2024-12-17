@@ -1,7 +1,9 @@
 package com.startlet.starlet_academy.controllers;
 
+import com.startlet.starlet_academy.models.Student;
 import com.startlet.starlet_academy.models.User;
 import com.startlet.starlet_academy.models.UserDTO;
+import com.startlet.starlet_academy.models.Users;
 import com.startlet.starlet_academy.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -35,14 +37,30 @@ logger.info("Registration request {}",user.getUsername());
         return userService.authenticate(user.getUsername(), user.getPassword());
     }
     @GetMapping("user_list")
-    public  ResponseEntity<Page<UserDTO>> getUsers(@PageableDefault(size = 100,sort = "id")Pageable pageable){
+    public  ResponseEntity<Page<UserDTO>> getUsers(@PageableDefault(size =1000,sort = "id")Pageable pageable){
         Page<UserDTO> users = userService.getUsers(pageable);
         return ResponseEntity.ok(users);
     }
-    @PutMapping("/{username}/deactivate")
+    @PostMapping("/{username}/deactivate")
     public ResponseEntity<String> deactivateUser(@PathVariable String username) {
         userService.deactivateUser(username);
         return ResponseEntity.ok("User deactivated successfully.");
+    }
+    @PostMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody User user){
+        UserDTO userUpdateResponse = userService.updateUser(userId,user);
+        return ResponseEntity.ok(userUpdateResponse);
+    }
+
+    @GetMapping("user_count")
+    public  ResponseEntity<Long> getUsersCount(){
+        long  countOfusers = userService.getUsersCount();
+        return ResponseEntity.ok(countOfusers);
+    }
+    @GetMapping("/{userId}")
+    public  ResponseEntity<UserDTO> getUser(@PathVariable long userId){
+        UserDTO  countOfusers = userService.getUser(userId);
+        return ResponseEntity.ok(countOfusers);
     }
 
 }

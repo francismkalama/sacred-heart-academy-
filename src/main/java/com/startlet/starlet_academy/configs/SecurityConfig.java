@@ -33,6 +33,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));
         return http.build();
     }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+//                .httpBasic(withDefaults())
+//                .csrf(AbstractHttpConfigurer::disable);
+//        return http.build();
+//    }
     @Bean
     public InMemoryUserDetailsManager userDetailsService(AppConfigs apiConfigs) {
         // encoder

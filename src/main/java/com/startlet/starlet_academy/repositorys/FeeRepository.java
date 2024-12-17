@@ -1,6 +1,6 @@
 package com.startlet.starlet_academy.repositorys;
 
-import com.startlet.starlet_academy.models.Institution.Fee;
+import com.startlet.starlet_academy.models.Institution.Fees;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,8 +8,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FeeRepository extends JpaRepository<Fee, Long> {
+public interface FeeRepository extends JpaRepository<Fees, Long> {
 @Query(value = "SELECT * FROM Fee f WHERE f.student_id = :studentId",nativeQuery = true)
-    List<Fee> findByStudentStudentId(long studentId);
-//    List<Fee> findByStudentsStudentId(long studentId);
+    List<Fees> findByStudentStudentId(long studentId);
+    @Query(value = "SELECT COALESCE(SUM(f.fees_Amount), 0) FROM fees_data f",nativeQuery = true)
+    double sumFees();
+    @Query(value = "SELECT COALESCE(SUM(f.total), 0) FROM fees_data f",nativeQuery = true)
+    double sumPayments();
+    @Query(value = "SELECT (SUM(f.fees_Amount) - SUM(f.total)) FROM fees_data f",nativeQuery = true)
+    double sumOutstandingPayments();
 }

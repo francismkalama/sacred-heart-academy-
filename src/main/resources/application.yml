@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: root1234
+    password: admin
   jpa:
     hibernate:
       ddl-auto: 'update'
@@ -13,15 +13,20 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
       format_sql: true
+#      type: trace
 server:
   port: 8080
 api:
   props:
     api-username: starlet
     api-password: starlet
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
+schedule:
+  cron: "30 * * * * ?"
+#logging:
+#  level:
+#    org:
+#      hibernate:
+##        SQL: debug
+#      springframework:
+#        web: debug
 

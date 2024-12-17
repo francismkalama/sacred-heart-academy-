@@ -8,6 +8,7 @@ import java.util.Date;
 public class EnrollmentDTO {
     private String className;
     private String section;
+//    private long enrollmentDate;
     private Date enrollmentDate;
     private String status;
 }

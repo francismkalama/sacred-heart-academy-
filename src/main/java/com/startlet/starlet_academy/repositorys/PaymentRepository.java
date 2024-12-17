@@ -11,4 +11,5 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     @Query(value = "SELECT * FROM Payment p WHERE p.fee_id =: feeId",nativeQuery = true)
     List<Payment> findByFeeFeeId(int feeId);
+
 }
