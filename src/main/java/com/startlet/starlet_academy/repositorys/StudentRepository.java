@@ -33,7 +33,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 //Optional<StudentDTOResponse> findStudentsWithParents(@Param("studentId") int studentId);
 //StudentDTOResponse findStudentsWithParents(@Param("studentId") int studentId);
 @Query(value = "SELECT s.student_id AS student_id, s.adm_no, s.first_name, s.last_name, s.date_of_birth, s.gender, " +
-        "s.address_street, s.address_city, s.address_state, s.address_postal_code,s.date_of_admission,s.student_class,s.term, " +
+        "s.address_street, s.address_city, s.address_state, s.address_postal_code,s.date_of_admission,s.student_class,s.term,s.date_saved,s.updated_date," +
         "p.parent_id AS parent_id, p.name AS parent_name, p.relationship AS parent_relationship, p.phone AS parent_phone, p.email AS parent_email, " +
         "fd.fees_id AS fees_id, fd.outstanding_fees, fd.admission, fd.fees_amount, fd.tution, fd.lunch, fd.transport, " +
         "fd.computer, fd.exams, fd.assessment, fd.extra_curriculum, fd.total " +
