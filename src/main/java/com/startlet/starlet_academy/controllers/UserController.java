@@ -41,12 +41,12 @@ logger.info("Registration request {}",user.getUsername());
         Page<UserDTO> users = userService.getUsers(pageable);
         return ResponseEntity.ok(users);
     }
-    @PutMapping("/{username}/deactivate")
+    @PostMapping("/{username}/deactivate")
     public ResponseEntity<String> deactivateUser(@PathVariable String username) {
         userService.deactivateUser(username);
         return ResponseEntity.ok("User deactivated successfully.");
     }
-    @PutMapping("/{userId}")
+    @PostMapping("/{userId}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable long userId, @RequestBody User user){
         UserDTO userUpdateResponse = userService.updateUser(userId,user);
         return ResponseEntity.ok(userUpdateResponse);

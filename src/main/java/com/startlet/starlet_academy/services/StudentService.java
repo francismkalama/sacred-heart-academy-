@@ -1,5 +1,6 @@
 package com.startlet.starlet_academy.services;
 
+import com.google.gson.Gson;
 import com.startlet.starlet_academy.models.*;
 import com.startlet.starlet_academy.models.Institution.Fees;
 import com.startlet.starlet_academy.models.Institution.FeesDTO;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +67,7 @@ public class StudentService {
         }
         return savedStudent;
     }
-    public StudentDTO getStudentById(int studentId) {
+    public StudentDTO getStudentById(long studentId) {
         StudentDTO studentDTO = new StudentDTO();
    Student results = studentRepository.findStudentsWithParents(studentId);
    studentDTO.setFirstName(results.getFirstName());
@@ -139,50 +141,141 @@ public class StudentService {
         return studentRepository.findAllStudents(pageable);
     }
 
-    public Student updateStudent(long studentId, Student student) {
-        Student existingStudent = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        existingStudent.setFirstName(student.getFirstName());
-        existingStudent.setLastName(student.getLastName());
-        existingStudent.setDateOfBirth(student.getDateOfBirth());
-        existingStudent.setGender(student.getGender());
-        existingStudent.setAddressCity(student.getAddressCity());
-        existingStudent.setAddressState(student.getAddressState());
-        existingStudent.setAddressPostalCode(student.getAddressPostalCode());
-        existingStudent.setAddressStreet(student.getAddressStreet());
+//    public Student updateStudent(long studentId, Student student) {
+////        findStudentsWithParents
+////        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
+//        Student existingStudent = studentRepository.findStudentsWithParents(studentId);
+//
+//        existingStudent.setFirstName(student.getFirstName());
+//        existingStudent.setLastName(student.getLastName());
+//        existingStudent.setDateOfBirth(student.getDateOfBirth());
+//        existingStudent.setDateOfAdmission(student.getDateOfAdmission());
+//        existingStudent.setGender(student.getGender());
+//        existingStudent.setAddressCity(student.getAddressCity());
+//        existingStudent.setAddressState(student.getAddressState());
+//        existingStudent.setAddressPostalCode(student.getAddressPostalCode());
+//        existingStudent.setAddressStreet(student.getAddressStreet());
+//        existingStudent.setStudentClass(student.getStudentClass());
+//        existingStudent.setTerm(student.getTerm());
+//        List<Parent> parentsList = student.getParents();
+//        logger.info("Parent List Size {}",parentsList.size());
+//        List<Parent> updatedParents = new ArrayList<>();
+//        if(parentsList != null && !parentsList.isEmpty()){
+//            logger.info("inside parent list");
+//            for (Parent parent:parentsList){
+//                Parent parentObj = existingStudent.getParents()
+//                        .stream()
+//                        .filter(p -> p.getParentId() == parent.getParentId()) // Check for existing parent by ID
+//                        .findFirst()
+//                        .orElse(new Parent());
+//                parentObj.setName(parent.getName());
+//                updatedParents.add(parentObj);
+//
+//            }
+//
+//        }
+//
+//        if (student.getParents()!=null){
+//            List<Parent> parentsData = student.getParents().stream()
+//                    .map(prnt -> parentRepository.findById(prnt.getParentId())
+//                    .orElseThrow(() -> new RuntimeException("Parent not found: " + prnt.getParentId())))
+//                    .collect(Collectors.toList());
+//
+//        }
+//        if (student.getEnrollments() != null){
+//            List<Enrollment> enrollmentsData = student.getEnrollments().stream()
+//                            .map(enrollment -> enrollmentRepository.findById(enrollment.getEnrollmentId())
+//                                    .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
+//                    .collect(Collectors.toList());
+//        }
+//        existingStudent.setParents(updatedParents);
+//
+//        return studentRepository.save(existingStudent);
+//    }
+public Student updateStudent(long studentId, StudentDTO student) {
+//        findStudentsWithParents
+//        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
+    Student existingStudent = studentRepository.findStudentsWithParents(studentId);
 
-        List<Parent> parentsList = student.getParents();
-        if(parentsList != null && !parentsList.isEmpty()){
-            List<Parent> updatedParents = new ArrayList<>();
-            for (Parent parent:parentsList){
-                Parent parentObj = student.getParents()
-                        .stream()
-                        .filter(p -> p.getParentId() == parent.getParentId()) // Check for existing parent by ID
-                        .findFirst()
-                        .orElse(new Parent());
+    existingStudent.setFirstName(student.getFirstName());
+    existingStudent.setLastName(student.getLastName());
+    existingStudent.setDateOfBirth(student.getDateOfBirth());
+    existingStudent.setDateOfAdmission(student.getDateOfAdmission());
+    existingStudent.setGender(student.getGender());
+    existingStudent.setAddressCity(student.getAddressCity());
+    existingStudent.setAddressState(student.getAddressState());
+    existingStudent.setAddressPostalCode(student.getAddressPostalCode());
+    existingStudent.setAddressStreet(student.getAddressStreet());
+    existingStudent.setStudentClass(student.getStudentsClass());
+    existingStudent.setTerm(student.getTerm());
+    List<ParentDTO> parentsList = student.getParents();
+    List<FeesDTO>feesList = student.getFees();
+    List<Parent> updatedParents = new ArrayList<>();
+    List<Fees>updatedFees = new ArrayList<>();
+    if(parentsList != null && !parentsList.isEmpty()){
+        for (ParentDTO parent:parentsList){
+            Parent parentObj = existingStudent.getParents()
+                    .stream()
+                    .filter(p -> p.getStudent().getId() == studentId) // Check for existing parent by ID
+                    .findFirst()
+                    .orElse(new Parent());
+            if (parentObj.getEmail().equals(parent.getEmail())){
                 parentObj.setName(parent.getName());
-
+                parentObj.setPhone(parent.getPhone());
+                parentObj.setRelationship(parent.getRelationship());
+            }else {
+                parentObj.setEmail(parent.getEmail());
+                parentObj.setName(parent.getName());
+                parentObj.setPhone(parent.getPhone());
+                parentObj.setRelationship(parent.getRelationship());
             }
+            updatedParents.add(parentObj);
 
         }
 
-        if (student.getParents()!=null){
-            List<Parent> parentsData = student.getParents().stream()
-                    .map(prnt -> parentRepository.findById(prnt.getParentId())
-                    .orElseThrow(() -> new RuntimeException("Parent not found: " + prnt.getParentId())))
-                    .collect(Collectors.toList());
-
-        }
-        if (student.getEnrollments() != null){
-            List<Enrollment> enrollmentsData = student.getEnrollments().stream()
-                            .map(enrollment -> enrollmentRepository.findById(enrollment.getEnrollmentId())
-                                    .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
-                    .collect(Collectors.toList());
-        }
-
-        return studentRepository.save(existingStudent);
     }
+    if(feesList != null && !feesList.isEmpty()){
+        for (FeesDTO feesDTO:feesList){
+            BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+                    .add(feesDTO.getExtraCurriculim()).add(feesDTO.getTransport())
+                    .add(feesDTO.getTution()).add(feesDTO.getAdmission());
+            Fees fees = existingStudent.getFees()
+                    .stream()
+                    .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
+                    .findFirst()
+                    .orElse(new Fees());
+            fees.setExtraCurriculum(feesDTO.getExtraCurriculim());
+            fees.setLunch(feesDTO.getLunch());
+            fees.setTution(feesDTO.getTution());
+            fees.setFeesAmount(feesDTO.getFeesAmount());
+            fees.setExams(feesDTO.getExams());
+            fees.setComputer(feesDTO.getComputer());
+            fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
+            fees.setTransport(feesDTO.getTransport());
+            fees.setTotal(paidAmount);
+            updatedFees.add(fees);
+        }
 
+    }
+//
+//    if (student.getParents()!=null){
+//        List<Parent> parentsData = student.getParents().stream()
+//                .map(prnt -> parentRepository.findById(prnt.getParentId())
+//                        .orElseThrow(() -> new RuntimeException("Parent not found: " + prnt.getParentId())))
+//                .collect(Collectors.toList());
+//
+//    }
+//    if (student.getEnrollments() != null){
+//        List<Enrollment> enrollmentsData = student.getEnrollments().stream()
+//                .map(enrollment -> enrollmentRepository.findById(enrollment.getEnrollmentId())
+//                        .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
+//                .collect(Collectors.toList());
+//    }
+    existingStudent.setParents(updatedParents);
+    existingStudent.setFees(updatedFees);
+
+    return studentRepository.save(existingStudent);
+}
     public long getStudentCount() {
         return studentRepository.count();
     }

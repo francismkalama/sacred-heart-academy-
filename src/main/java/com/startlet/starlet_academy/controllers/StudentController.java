@@ -91,7 +91,7 @@ public class StudentController {
         return student;
     }
     @GetMapping("/{studentId}")
-    public StudentDTO getStudent(@PathVariable int studentId) {
+    public StudentDTO getStudent(@PathVariable long studentId) {
         return studentService.getStudentById(studentId);  // Call the service method
     }
     @GetMapping("/student_list")
@@ -100,11 +100,16 @@ public class StudentController {
         Page<Student> studentsPage = studentService.getStudentList(pageable);
         return ResponseEntity.ok(studentsPage);
     }
-    @PutMapping("/{studentId}")
-    public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
-        Student studentData = studentService.updateStudent(studentId,student);
-        return ResponseEntity.ok(studentData);
-    }
+//    @PostMapping("/{studentId}")
+//    public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
+//        Student studentData = studentService.updateStudent(studentId,student);
+//        return ResponseEntity.ok(studentData);
+//    }
+@PostMapping("/{studentId}")
+public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody StudentDTO student){
+    Student studentData = studentService.updateStudent(studentId,student);
+    return ResponseEntity.ok(studentData);
+}
     @GetMapping("/student_count")
     public ResponseEntity<Long> getStudentsCount() {
         long studentsCount = studentService.getStudentCount();
