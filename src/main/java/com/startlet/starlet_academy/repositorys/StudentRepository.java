@@ -47,7 +47,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
         "LEFT JOIN parents p ON p.student_id = s.student_id " +
         "LEFT JOIN fees_data fd ON fd.student_id = s.student_id " +
         "WHERE s.student_id = :studentId", nativeQuery = true)
-Student findStudentsWithParents(@Param("studentId") int studentId);
+Student findStudentsWithParents(@Param("studentId") long studentId);
 
     @Query(value = "SELECT * FROM Students",nativeQuery = true)
     Page<Student> findAllStudents(Pageable pageable);
