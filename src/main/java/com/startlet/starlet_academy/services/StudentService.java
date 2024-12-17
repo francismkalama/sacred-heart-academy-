@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -237,9 +238,15 @@ public Student updateStudent(long studentId, StudentDTO student) {
     }
     if(feesList != null && !feesList.isEmpty()){
         for (FeesDTO feesDTO:feesList){
-            BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
-                    .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
-                    .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
+            BigDecimal empyValue = BigDecimal.ZERO;
+            BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():empyValue.
+                    add(Objects.nonNull(feesDTO.getComputer())?feesDTO.getComputer():empyValue).
+                    add(Objects.nonNull(feesDTO.getAssessment())?feesDTO.getAssessment():empyValue)
+                    .add(Objects.nonNull(feesDTO.getExtraCurriculum())?feesDTO.getExtraCurriculum():empyValue)
+                    .add(Objects.nonNull(feesDTO.getTransport())?feesDTO.getTransport():empyValue)
+                    .add(Objects.nonNull(feesDTO.getTution())?feesDTO.getTution():empyValue).
+                    add(Objects.nonNull(feesDTO.getAdmission())?feesDTO.getAdmission():empyValue)
+                    .add(Objects.nonNull(feesDTO.getLunch())?feesDTO.getLunch():empyValue);
             Fees fees = existingStudent.getFees()
                     .stream()
                     .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
