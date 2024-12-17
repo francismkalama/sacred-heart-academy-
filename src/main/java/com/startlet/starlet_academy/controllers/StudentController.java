@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.startlet.starlet_academy.models.*;
 import com.startlet.starlet_academy.models.Institution.Fees;
 import com.startlet.starlet_academy.models.Institution.FeesDTO;
+import com.startlet.starlet_academy.models.dataobjects.MonthlyTransactions;
 import com.startlet.starlet_academy.services.StudentService;
 import com.startlet.starlet_academy.utils.NumberConversion;
 import org.slf4j.Logger;
@@ -122,5 +123,10 @@ public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@Reque
             studentsCount = studentService.getStudentCount();
         }
         return ResponseEntity.ok(studentsCount);
+    }
+
+    @GetMapping("/monthly")
+    public List<MonthlyTransactions> getMonthly() {
+        return studentService.getMonthlyTransations();  // Call the service method
     }
 }
