@@ -3,13 +3,12 @@ package com.startlet.starlet_academy.services;
 import com.startlet.starlet_academy.models.*;
 import com.startlet.starlet_academy.models.Institution.Fees;
 import com.startlet.starlet_academy.models.Institution.FeesDTO;
-import com.startlet.starlet_academy.repositorys.EnrollmentRepository;
-import com.startlet.starlet_academy.repositorys.FeesRepository;
-import com.startlet.starlet_academy.repositorys.ParentRepository;
-import com.startlet.starlet_academy.repositorys.StudentRepository;
+import com.startlet.starlet_academy.models.Institution.FeesHistory;
+import com.startlet.starlet_academy.repositorys.*;
 import com.startlet.starlet_academy.utils.NumberConversion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,12 +26,14 @@ public class StudentService {
     private final EnrollmentRepository enrollmentRepository;
 
     private final FeesRepository feesRepository;
+    private final FeesHistoryRepository feesHistoryRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository, FeesRepository feesRepository) {
+    public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository, FeesRepository feesRepository, FeesHistoryRepository feesHistoryRepository) {
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.feesRepository = feesRepository;
+        this.feesHistoryRepository = feesHistoryRepository;
     }
     public Student  addStudent(Student student, List<Parent> parentsData, List<Enrollment> enrollmentData, List<Fees> feeData) {
         Student savedStudent = studentRepository.save(student);
@@ -56,8 +57,13 @@ public class StudentService {
         }
         for (Fees fees : feeData) {
             fees.setStudent(savedStudent);
+            FeesHistory history = new FeesHistory();
             try {
+                BeanUtils.copyProperties(fees, history);
+                history.setDateSaved(LocalDateTime.now());
+                history.setUpdatedDate(LocalDateTime.now());
                 feesRepository.save(fees);
+                feesHistoryRepository.save(history);
                 logger.info("Fees Data saved successfully");
             }catch (Exception e){
                 logger.error("Error Saving fees information  {}",e.getMessage());
@@ -265,6 +271,8 @@ public Student updateStudent(long studentId, StudentDTO student) {
             fees.setTotal(paidAmount);
             fees.setUpdatedDate(LocalDateTime.now());
             updatedFees.add(fees);
+            saveHistory(fees);
+
         }
 
     }
@@ -287,6 +295,26 @@ public Student updateStudent(long studentId, StudentDTO student) {
 
     return studentRepository.save(existingStudent);
 }
+
+    private void saveHistory(Fees fee) {
+        FeesHistory history = new FeesHistory();
+        history.setExtraCurriculum(fee.getExtraCurriculum());
+        history.setAdmission(fee.getAdmission());
+        history.setAssessment(fee.getAssessment());
+        history.setLunch(fee.getLunch());
+        history.setTution(fee.getTution());
+        history.setFeesAmount(fee.getFeesAmount());
+        history.setExams(fee.getExams());
+        history.setComputer(fee.getComputer());
+        history.setOutstandingFees(fee.getOutstandingFees());
+        history.setTransport(fee.getTransport());
+        history.setTotal(fee.getTotal());
+        history.setStudent(fee.getStudent());
+        history.setUpdatedDate(LocalDateTime.now());
+        history.setDateSaved(LocalDateTime.now());
+        feesHistoryRepository.save(history);
+    }
+
     public long getStudentCount() {
         return studentRepository.count();
     }
