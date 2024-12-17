@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface MonthlyTransactionsRepository extends JpaRepository<MonthlyTransactions, String> {
 
+    List<MonthlyTransactions> findByYear(Long year);
+
 }

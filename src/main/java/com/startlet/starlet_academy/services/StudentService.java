@@ -326,7 +326,7 @@ public Student updateStudent(long studentId, StudentDTO student) {
         return studentRepository.countStudentByAdmMonth(monthValue,year);
     }
 
-    public List<MonthlyTransactions> getMonthlyTransations(){
-        return monthlyTransactionsRepository.findAll();
+    public List<MonthlyTransactions> getMonthlyTransations(String year){
+        return monthlyTransactionsRepository.findByYear(Long.valueOf(year));
     }
 }
