@@ -6,6 +6,7 @@ import com.startlet.starlet_academy.repositorys.FeesAnalyticsRepository;
 import com.startlet.starlet_academy.repositorys.FeesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,13 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class FeeCronJob {
 //    @Scheduled(cron = "0 0 0 1 * ?")
-
+//@Value("${schedule.cron}")
+//private String cronExpression;
     private final FeesRepository feesRepository;
     private final FeesAnalyticsRepository feesAnalyticsRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,7 +31,8 @@ public class FeeCronJob {
         this.feesAnalyticsRepository = feesAnalyticsRepository;
     }
 
-    @Scheduled(cron = "0 0 0 1 * ?")
+//    @Scheduled(cron = "0 0 0 1 * ?")
+@Scheduled(cron = "${schedule.cron}")
     public void runFirstDayOfMonthJob() {
         // Your business logic here
         System.out.println("Running job on the first day of the month to get Fee data.");
@@ -36,7 +40,7 @@ public class FeeCronJob {
         Fee feeAnalytics = new Fee();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime currentDateTime = LocalDateTime.now();
-        logger.info("{} {}",currentDateTime.getYear(),currentDateTime.getMonthValue());
+//        logger.info("{} {}",currentDateTime.getYear(),currentDateTime.getMonthValue());
         BigDecimal totalFeeMonthlyAmount = feesRepository.getTotalFeesAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
         BigDecimal totalOutstandingMonthlyAmount = feesRepository.getTotalOutstandingAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
         BigDecimal totalPaidMonthlyAmount = feesRepository.getTotalPaidAmountByMonthAndYear(currentDateTime.getYear(),currentDateTime.getMonthValue()-1);
@@ -46,7 +50,11 @@ public class FeeCronJob {
         feeAnalytics.setTotalPaid(totalPaidMonthlyAmount);
         feeAnalytics.setTotalOutstanding(totalOutstandingMonthlyAmount);
         try{
-            feesAnalyticsRepository.save(feeAnalytics);
+           int entryCheck = feesAnalyticsRepository.checkEntryBasedOnMonthandYear(currentDateTime.getYear(),Month.of(currentDateTime.getMonthValue()).name());
+           if (entryCheck == 0 ){
+               feesAnalyticsRepository.save(feeAnalytics);
+               logger.info("Fees Analytics updated");
+           }
         }catch (Exception e){
             logger.error("Error Saving Fee analytics {}",e.getMessage());
         }
