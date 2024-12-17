@@ -4,6 +4,7 @@ import com.startlet.starlet_academy.models.*;
 import com.startlet.starlet_academy.models.Institution.Fees;
 import com.startlet.starlet_academy.models.Institution.FeesDTO;
 import com.startlet.starlet_academy.models.Institution.FeesHistory;
+import com.startlet.starlet_academy.models.dataobjects.MonthlyTransactions;
 import com.startlet.starlet_academy.repositorys.*;
 import com.startlet.starlet_academy.utils.NumberConversion;
 import org.slf4j.Logger;
@@ -27,13 +28,15 @@ public class StudentService {
 
     private final FeesRepository feesRepository;
     private final FeesHistoryRepository feesHistoryRepository;
+    private final MonthlyTransactionsRepository monthlyTransactionsRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository, FeesRepository feesRepository, FeesHistoryRepository feesHistoryRepository) {
+    public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository, FeesRepository feesRepository, FeesHistoryRepository feesHistoryRepository, MonthlyTransactionsRepository monthlyTransactionsRepository) {
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
         this.enrollmentRepository = enrollmentRepository;
         this.feesRepository = feesRepository;
         this.feesHistoryRepository = feesHistoryRepository;
+        this.monthlyTransactionsRepository = monthlyTransactionsRepository;
     }
     public Student  addStudent(Student student, List<Parent> parentsData, List<Enrollment> enrollmentData, List<Fees> feeData) {
         Student savedStudent = studentRepository.save(student);
@@ -321,5 +324,9 @@ public Student updateStudent(long studentId, StudentDTO student) {
 
     public long getStudentCountbyMonth(int monthValue, int year) {
         return studentRepository.countStudentByAdmMonth(monthValue,year);
+    }
+
+    public List<MonthlyTransactions> getMonthlyTransations(){
+        return monthlyTransactionsRepository.findAll();
     }
 }
