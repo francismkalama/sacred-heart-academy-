@@ -125,8 +125,8 @@ public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@Reque
         return ResponseEntity.ok(studentsCount);
     }
 
-    @GetMapping("/monthly")
-    public List<MonthlyTransactions> getMonthly() {
-        return studentService.getMonthlyTransations();  // Call the service method
+    @GetMapping("/monthly/{year}")
+    public List<MonthlyTransactions> getMonthly(@PathVariable String year) {
+        return studentService.getMonthlyTransations(year);  // Call the service method
     }
 }
