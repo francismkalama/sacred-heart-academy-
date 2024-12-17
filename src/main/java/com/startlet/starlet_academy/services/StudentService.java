@@ -1,6 +1,5 @@
 package com.startlet.starlet_academy.services;
 
-import com.google.gson.Gson;
 import com.startlet.starlet_academy.models.*;
 import com.startlet.starlet_academy.models.Institution.Fees;
 import com.startlet.starlet_academy.models.Institution.FeesDTO;
@@ -18,10 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -286,5 +282,9 @@ public Student updateStudent(long studentId, StudentDTO student) {
 }
     public long getStudentCount() {
         return studentRepository.count();
+    }
+
+    public long getStudentCountbyMonth(int monthValue, int year) {
+        return studentRepository.countStudentByAdmMonth(monthValue,year);
     }
 }

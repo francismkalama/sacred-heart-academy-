@@ -115,9 +115,15 @@ public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@Reque
         Student studentData = studentService.updateStudent(studentId,student);
     return ResponseEntity.ok(studentData);
 }
-    @GetMapping("/student_count")
-    public ResponseEntity<Long> getStudentsCount() {
-        long studentsCount = studentService.getStudentCount();
+    @GetMapping("/student_count/{monthValue}")
+    public ResponseEntity<Long> getStudentsCount(@PathVariable int monthValue) {
+        long studentsCount;
+        if (monthValue > 0){
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            studentsCount= studentService.getStudentCountbyMonth(monthValue,currentDateTime.getYear());
+        }else{
+            studentsCount = studentService.getStudentCount();
+        }
         return ResponseEntity.ok(studentsCount);
     }
 }

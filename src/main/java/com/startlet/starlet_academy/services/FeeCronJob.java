@@ -28,7 +28,7 @@ public class FeeCronJob {
         this.feesAnalyticsRepository = feesAnalyticsRepository;
     }
 
-    @Scheduled(cron = "10 * * * * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void runFirstDayOfMonthJob() {
         // Your business logic here
         System.out.println("Running job on the first day of the month to get Fee data.");
