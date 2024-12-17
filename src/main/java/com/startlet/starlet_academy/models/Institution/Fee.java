@@ -22,7 +22,7 @@ public class Fee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long feeId;
     private String feeMonth;
-    private Integer feeYear;
+    private String feeYear;
     private BigDecimal totalPaid;
     private BigDecimal totalOutstanding;
     private BigDecimal totalExpected;
