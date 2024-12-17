@@ -1,18 +1,12 @@
 package com.startlet.starlet_academy.repositorys;
 
 import com.startlet.starlet_academy.models.Student;
-import com.startlet.starlet_academy.models.StudentDTO;
-import com.startlet.starlet_academy.models.StudentDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
@@ -51,4 +45,6 @@ Student findStudentsWithParents(@Param("studentId") long studentId);
 
     @Query(value = "SELECT * FROM Students",nativeQuery = true)
     Page<Student> findAllStudents(Pageable pageable);
+    @Query(value ="SELECT COUNT(*) FROM students s WHERE EXTRACT(YEAR FROM s.date_of_admission) = :year AND EXTRACT(MONTH FROM s.date_of_admission) = :monthValue", nativeQuery = true)
+    long countStudentByAdmMonth(int monthValue, int year);
 }
