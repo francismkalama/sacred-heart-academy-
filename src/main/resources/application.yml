@@ -20,8 +20,8 @@ api:
   props:
     api-username: starlet
     api-password: starlet
-schedule:
-  cron: "30 * * * * ?"
+#schedule:
+#  cron: "30 * * * * ?"
 #logging:
 #  level:
 #    org:

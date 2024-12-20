@@ -111,98 +111,23 @@ public class StudentService {
         feesDTO.setAssessment(fer.getAssessment());
         feesDTO.setExams(fer.getExams());
         feesDTO.setLunch(fer.getLunch());
-        feesDTO.setOutstandingFees(fer.getOutstandingFees());
+        feesDTO.setOutstandingFees(fer.getFeesAmount().subtract(paidAmount));
         feesDTO.setTransport(fer.getTransport());
         feesDTO.setTution(fer.getTution());
         feesDTO.setAdmission(fer.getAdmission());
         feesDTO.setExtraCurriculum(fer.getExtraCurriculum());
         feesDTO.setPaidAmount(paidAmount);
-        feesDTO.setAmountDesc(NumberConversion.convertBigDecimal(fer.getTotal()));
+        feesDTO.setAmountDesc(NumberConversion.convertBigDecimal(paidAmount)+" only");
         rsFeeDataSet.add(feesDTO);
          }
     studentDTO.setParents(rsParentDataSet);
     studentDTO.setFees(rsFeeDataSet);
-
-        // Check if the student exists
-
-//        if (student.isPresent()) {
-//            StudentDTOResponse stude = student.get();
-//            studentDTO.setFirstName(stude.getFirst_name());
-//            studentDTO.setLastName(stude.getLast_name());
-////            List<Parent> studentParentData = stude.getParents();
-//            List<ParentDTO> genParentData = new ArrayList<>();
-//            for (Parent nameData : studentParentData){
-//                ParentDTO parentDTO = new ParentDTO();
-//                parentDTO.setName(nameData.getName());
-//                parentDTO.setPhone(nameData.getPhone());
-//                parentDTO.setRelationship(nameData.getRelationship());
-//                parentDTO.setEmail(nameData.getEmail());
-//                genParentData.add(parentDTO);
-//            }
-//            studentDTO.setParents(genParentData);
-//            return studentDTO;  // Return the student if found
-//        } else {
-//            logger.error("Student not found with ID: " + studentId);
-//            return studentDTO;
-//        }
         return studentDTO;
     }
 
     public Page<Student> getStudentList(Pageable pageable){
         return studentRepository.findAllStudents(pageable);
     }
-
-//    public Student updateStudent(long studentId, Student student) {
-////        findStudentsWithParents
-////        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
-//        Student existingStudent = studentRepository.findStudentsWithParents(studentId);
-//
-//        existingStudent.setFirstName(student.getFirstName());
-//        existingStudent.setLastName(student.getLastName());
-//        existingStudent.setDateOfBirth(student.getDateOfBirth());
-//        existingStudent.setDateOfAdmission(student.getDateOfAdmission());
-//        existingStudent.setGender(student.getGender());
-//        existingStudent.setAddressCity(student.getAddressCity());
-//        existingStudent.setAddressState(student.getAddressState());
-//        existingStudent.setAddressPostalCode(student.getAddressPostalCode());
-//        existingStudent.setAddressStreet(student.getAddressStreet());
-//        existingStudent.setStudentClass(student.getStudentClass());
-//        existingStudent.setTerm(student.getTerm());
-//        List<Parent> parentsList = student.getParents();
-//        logger.info("Parent List Size {}",parentsList.size());
-//        List<Parent> updatedParents = new ArrayList<>();
-//        if(parentsList != null && !parentsList.isEmpty()){
-//            logger.info("inside parent list");
-//            for (Parent parent:parentsList){
-//                Parent parentObj = existingStudent.getParents()
-//                        .stream()
-//                        .filter(p -> p.getParentId() == parent.getParentId()) // Check for existing parent by ID
-//                        .findFirst()
-//                        .orElse(new Parent());
-//                parentObj.setName(parent.getName());
-//                updatedParents.add(parentObj);
-//
-//            }
-//
-//        }
-//
-//        if (student.getParents()!=null){
-//            List<Parent> parentsData = student.getParents().stream()
-//                    .map(prnt -> parentRepository.findById(prnt.getParentId())
-//                    .orElseThrow(() -> new RuntimeException("Parent not found: " + prnt.getParentId())))
-//                    .collect(Collectors.toList());
-//
-//        }
-//        if (student.getEnrollments() != null){
-//            List<Enrollment> enrollmentsData = student.getEnrollments().stream()
-//                            .map(enrollment -> enrollmentRepository.findById(enrollment.getEnrollmentId())
-//                                    .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
-//                    .collect(Collectors.toList());
-//        }
-//        existingStudent.setParents(updatedParents);
-//
-//        return studentRepository.save(existingStudent);
-//    }
 public Student updateStudent(long studentId, StudentDTO student) {
 //        findStudentsWithParents
 //        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -247,15 +172,18 @@ public Student updateStudent(long studentId, StudentDTO student) {
     }
     if(feesList != null && !feesList.isEmpty()){
         for (FeesDTO feesDTO:feesList){
-            BigDecimal empyValue = BigDecimal.ZERO;
-            BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():empyValue.
-                    add(Objects.nonNull(feesDTO.getComputer())?feesDTO.getComputer():empyValue).
-                    add(Objects.nonNull(feesDTO.getAssessment())?feesDTO.getAssessment():empyValue)
-                    .add(Objects.nonNull(feesDTO.getExtraCurriculum())?feesDTO.getExtraCurriculum():empyValue)
-                    .add(Objects.nonNull(feesDTO.getTransport())?feesDTO.getTransport():empyValue)
-                    .add(Objects.nonNull(feesDTO.getTution())?feesDTO.getTution():empyValue).
-                    add(Objects.nonNull(feesDTO.getAdmission())?feesDTO.getAdmission():empyValue)
-                    .add(Objects.nonNull(feesDTO.getLunch())?feesDTO.getLunch():empyValue);
+            BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+                    .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
+                    .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
+//            BigDecimal empyValue = BigDecimal.ZERO;
+//            BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():empyValue.
+//                    add(Objects.nonNull(feesDTO.getComputer())?feesDTO.getComputer():empyValue).
+//                    add(Objects.nonNull(feesDTO.getAssessment())?feesDTO.getAssessment():empyValue)
+//                    .add(Objects.nonNull(feesDTO.getExtraCurriculum())?feesDTO.getExtraCurriculum():empyValue)
+//                    .add(Objects.nonNull(feesDTO.getTransport())?feesDTO.getTransport():empyValue)
+//                    .add(Objects.nonNull(feesDTO.getTution())?feesDTO.getTution():empyValue).
+//                    add(Objects.nonNull(feesDTO.getAdmission())?feesDTO.getAdmission():empyValue)
+//                    .add(Objects.nonNull(feesDTO.getLunch())?feesDTO.getLunch():empyValue);
             Fees fees = existingStudent.getFees()
                     .stream()
                     .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
@@ -328,5 +256,9 @@ public Student updateStudent(long studentId, StudentDTO student) {
 
     public List<MonthlyTransactions> getMonthlyTransations(){
         return monthlyTransactionsRepository.findAll();
+    }
+
+    public Page<List<Student>> getStudentWithAdmNo(Pageable pageable, String admNo) {
+        return studentRepository.findStudentBySearch(pageable,admNo);
     }
 }

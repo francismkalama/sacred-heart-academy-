@@ -9,7 +9,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 
 @SpringBootApplication
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
-@EnableScheduling
+//@EnableScheduling
 public class StarletAcademyApplication {
 
 	public static void main(String[] args) {

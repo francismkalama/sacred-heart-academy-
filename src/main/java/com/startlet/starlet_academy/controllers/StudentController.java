@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/student")
@@ -70,7 +71,8 @@ public class StudentController {
         List<Fees>feeData = new ArrayList<>();
 //        if(studentDTO.getFees()!=null){
             for (FeesDTO feesDTO : studentDTO.getFees()){
-                BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+//                logger.info(" {}", feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment()).add(feesDTO.getExtraCurriculum()));
+                BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():new BigDecimal("0.0").add(feesDTO.getComputer()).add(feesDTO.getAssessment())
                         .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
                         .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
                 Fees fees = new Fees();
@@ -110,7 +112,8 @@ public class StudentController {
 //    }
 @PostMapping("/{studentId}")
 public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody StudentDTO student){
-    Student studentData = studentService.updateStudent(studentId,student);
+    logger.info("Received Add students Requests {}",new Gson().toJson(student));
+        Student studentData = studentService.updateStudent(studentId,student);
     return ResponseEntity.ok(studentData);
 }
     @GetMapping("/student_count/{monthValue}")
