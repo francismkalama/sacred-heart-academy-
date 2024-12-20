@@ -18,6 +18,6 @@ public class Users{
     private String name;
     @Column(nullable = false)
     private String user_role;
-    @Column(nullable = false)
-    private String name;
+//    @Column(nullable = false)
+//    private String name;
 }

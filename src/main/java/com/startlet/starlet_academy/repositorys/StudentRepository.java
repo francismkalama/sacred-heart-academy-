@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
 //    @EntityGraph(attributePaths = {
@@ -47,4 +49,6 @@ Student findStudentsWithParents(@Param("studentId") long studentId);
     Page<Student> findAllStudents(Pageable pageable);
     @Query(value ="SELECT COUNT(*) FROM students s WHERE EXTRACT(YEAR FROM s.date_of_admission) = :year AND EXTRACT(MONTH FROM s.date_of_admission) = :monthValue", nativeQuery = true)
     long countStudentByAdmMonth(int monthValue, int year);
+@Query(value = "SELECT * FROM Students s WHERE s.adm_no LIKE %:admNo% ",nativeQuery = true)
+    Page<List<Student>> findStudentBySearch(Pageable pageable, String admNo);
 }

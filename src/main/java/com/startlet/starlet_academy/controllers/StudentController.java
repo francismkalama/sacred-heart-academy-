@@ -72,9 +72,13 @@ public class StudentController {
 //        if(studentDTO.getFees()!=null){
             for (FeesDTO feesDTO : studentDTO.getFees()){
 //                logger.info(" {}", feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment()).add(feesDTO.getExtraCurriculum()));
-                BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():new BigDecimal("0.0").add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+//                BigDecimal paidAmount = Objects.nonNull(feesDTO.getExams())?feesDTO.getExams():new BigDecimal("0.0").add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+//                        .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
+//                        .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
+                BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
                         .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
                         .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
+                logger.info("Paid Amount {}",paidAmount);
                 Fees fees = new Fees();
                 fees.setExams(feesDTO.getExams());
                 fees.setComputer(feesDTO.getComputer());
@@ -105,6 +109,13 @@ public class StudentController {
         Page<Student> studentsPage = studentService.getStudentList(pageable);
         return ResponseEntity.ok(studentsPage);
     }
+    @GetMapping("/student_number")
+    public ResponseEntity<Page<List<Student>>> getStudentBySearch(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size, @RequestParam String admNo) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("student_id"));
+        Page<List<Student>> studentsPage = studentService.getStudentWithAdmNo(pageable,admNo);
+        return ResponseEntity.ok(studentsPage);
+    }
+
 //    @PostMapping("/{studentId}")
 //    public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
 //        Student studentData = studentService.updateStudent(studentId,student);
