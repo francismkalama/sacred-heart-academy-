@@ -289,4 +289,8 @@ public Student updateStudent(long studentId, StudentDTO student) {
     public Page<List<Student>> getStudentWithAdmNo(Pageable pageable, String admNo) {
         return studentRepository.findStudentBySearchIgnoreCase(pageable,admNo);
     }
+
+    public boolean checkAdmissionNumber(String admissionNumber) {
+        return studentRepository.checkExistingStudent(admissionNumber);
+    }
 }

@@ -51,4 +51,7 @@ Student findStudentsWithParents(@Param("studentId") long studentId);
     long countStudentByAdmMonth(int monthValue, int year);
 @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% OR s.first_name ILIKE %:admNo% OR s.last_name ILIKE %:admNo%",nativeQuery = true)
     Page<List<Student>> findStudentBySearchIgnoreCase(Pageable pageable, String admNo);
+//    @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% ",nativeQuery = true)
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo", nativeQuery = true)
+    boolean checkExistingStudent(String admNo);
 }

@@ -56,6 +56,7 @@ public class Student {
     private List<Fees> fees;
     private LocalDateTime dateSaved;
     private LocalDateTime updatedDate;
+//    private boolean student_status;
 //    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    private List<Grade> grades;
 //    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

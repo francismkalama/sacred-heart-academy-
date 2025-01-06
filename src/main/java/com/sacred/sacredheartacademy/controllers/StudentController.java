@@ -144,4 +144,9 @@ public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@Reque
     public List<MonthlyTransactions> getMonthly(@PathVariable String year) {
         return studentService.getMonthlyTransations(year);  // Call the service method
     }
+    @GetMapping("admission/{admNo}")
+    public boolean admNumberCheck(@PathVariable String admNo){
+        return studentService.checkAdmissionNumber(admNo);
+
+    }
 }
