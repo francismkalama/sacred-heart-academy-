@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,9 +120,13 @@ public class StudentController {
     }
 
     @PostMapping("deactivate/{studentId}")
-    public ResponseEntity<Student> deactivateStudent(@PathVariable long studentId){
-        Student studentData = studentService.deactivateStudent(studentId);
-        return ResponseEntity.ok(studentData);
+    public ResponseEntity<?> deactivateStudent(@PathVariable long studentId){
+        try {
+            Student studentData = studentService.deactivateStudent(studentId);
+            return new ResponseEntity<>("Successfully deactivated", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity("Unable to deactivate",HttpStatus.INTERNAL_SERVER_ERROR) ;
+        }
     }
 @PostMapping("/{studentId}")
 public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody StudentDTO student){

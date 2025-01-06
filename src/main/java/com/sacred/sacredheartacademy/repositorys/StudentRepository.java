@@ -54,4 +54,6 @@ Student findStudentsWithParents(@Param("studentId") long studentId);
 //    @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% ",nativeQuery = true)
     @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo", nativeQuery = true)
     boolean checkExistingStudent(String admNo);
+    @Query(value = "SELECT nextval('your_sequence_name')", nativeQuery = true)
+    Long getNextSequenceValue();
 }
