@@ -133,7 +133,6 @@ public Student updateStudent(long studentId, StudentDTO student) {
 //        findStudentsWithParents
 //        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
     Student existingStudent = studentRepository.findStudentsWithParents(studentId);
-
     existingStudent.setFirstName(student.getFirstName());
     existingStudent.setLastName(student.getLastName());
     existingStudent.setDateOfBirth(student.getDateOfBirth());
@@ -150,7 +149,6 @@ public Student updateStudent(long studentId, StudentDTO student) {
     List<FeesDTO>feesList = student.getFees();
     List<Parent> updatedParents = new ArrayList<>();
     List<Fees>updatedFees = new ArrayList<>();
-
     if(parentsList != null && !parentsList.isEmpty()){
         for (ParentDTO parent:parentsList){
             Parent parentObj = existingStudent.getParents()
@@ -292,5 +290,12 @@ public Student updateStudent(long studentId, StudentDTO student) {
 
     public boolean checkAdmissionNumber(String admissionNumber) {
         return studentRepository.checkExistingStudent(admissionNumber);
+    }
+
+    public Student deactivateStudent(long studentId) {
+        Student existingStudent = studentRepository.findStudentsWithParents(studentId);
+        existingStudent.setStudent_status(false);
+        studentRepository.save(existingStudent);
+        return existingStudent;
     }
 }

@@ -24,6 +24,6 @@ public class StudentDTO {
     private String addressPostalCode;
     private List<ParentDTO> parents;
     private List<FeesDTO> fees;
-//    private List<Fees> fees;
+    private boolean studentStatus;
     private List<EnrollmentDTO> enrollments;
 }

@@ -49,6 +49,7 @@ public class StudentController {
         student.setAddressPostalCode(studentDTO.getAddressPostalCode());
         student.setAdmNo(studentDTO.getAdmNo());
         student.setDateSaved(LocalDateTime.now());
+        student.setStudent_status(true);
         List<Parent> parentsData = new ArrayList<>();
         for (ParentDTO parentdto : studentDTO.getParents()) {
             Parent parent = new Parent();
@@ -117,14 +118,14 @@ public class StudentController {
         return ResponseEntity.ok(studentsPage);
     }
 
-//    @PostMapping("/{studentId}")
-//    public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody Student student){
-//        Student studentData = studentService.updateStudent(studentId,student);
-//        return ResponseEntity.ok(studentData);
-//    }
+    @PostMapping("deactivate/{studentId}")
+    public ResponseEntity<Student> deactivateStudent(@PathVariable long studentId){
+        Student studentData = studentService.deactivateStudent(studentId);
+        return ResponseEntity.ok(studentData);
+    }
 @PostMapping("/{studentId}")
 public ResponseEntity<Student> updateStudent(@PathVariable long studentId,@RequestBody StudentDTO student){
-    logger.info("Received Add students Requests {}",new Gson().toJson(student));
+    logger.info("Received Update students Requests {}",new Gson().toJson(student));
         Student studentData = studentService.updateStudent(studentId,student);
     return ResponseEntity.ok(studentData);
 }
