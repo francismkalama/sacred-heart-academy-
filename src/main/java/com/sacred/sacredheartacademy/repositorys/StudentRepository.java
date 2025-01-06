@@ -42,18 +42,18 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
         "FROM students s " +
         "LEFT JOIN parents p ON p.student_id = s.student_id " +
         "LEFT JOIN fees_data fd ON fd.student_id = s.student_id " +
-        "WHERE s.student_id = :studentId", nativeQuery = true)
+        "WHERE s.student_id = :studentId AND s.student_status=true", nativeQuery = true)
 Student findStudentsWithParents(@Param("studentId") long studentId);
 
-    @Query(value = "SELECT * FROM Students",nativeQuery = true)
+    @Query(value = "SELECT * FROM Students s WHERE s.student_status=true",nativeQuery = true)
     Page<Student> findAllStudents(Pageable pageable);
     @Query(value ="SELECT COUNT(*) FROM students s WHERE EXTRACT(YEAR FROM s.date_of_admission) = :year AND EXTRACT(MONTH FROM s.date_of_admission) = :monthValue", nativeQuery = true)
     long countStudentByAdmMonth(int monthValue, int year);
 @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% OR s.first_name ILIKE %:admNo% OR s.last_name ILIKE %:admNo%",nativeQuery = true)
     Page<List<Student>> findStudentBySearchIgnoreCase(Pageable pageable, String admNo);
 //    @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% ",nativeQuery = true)
-    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo", nativeQuery = true)
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo and s.student_status=true", nativeQuery = true)
     boolean checkExistingStudent(String admNo);
-    @Query(value = "SELECT nextval('your_sequence_name')", nativeQuery = true)
-    Long getNextSequenceValue();
+//    @Query(value = "SELECT nextval('your_sequence_name')", nativeQuery = true)
+//    Long getNextSequenceValue();
 }
