@@ -49,11 +49,11 @@ Student findStudentsWithParents(@Param("studentId") long studentId);
     Page<Student> findAllStudents(Pageable pageable);
     @Query(value ="SELECT COUNT(*) FROM students s WHERE EXTRACT(YEAR FROM s.date_of_admission) = :year AND EXTRACT(MONTH FROM s.date_of_admission) = :monthValue", nativeQuery = true)
     long countStudentByAdmMonth(int monthValue, int year);
-@Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% OR s.first_name ILIKE %:admNo% OR s.last_name ILIKE %:admNo%",nativeQuery = true)
+@Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% OR s.first_name ILIKE %:admNo% OR s.last_name ILIKE %:admNo% AND s.student_status=true",nativeQuery = true)
     Page<List<Student>> findStudentBySearchIgnoreCase(Pageable pageable, String admNo);
 //    @Query(value = "SELECT * FROM Students s WHERE s.adm_no ILIKE %:admNo% ",nativeQuery = true)
     @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo and s.student_status=true", nativeQuery = true)
     boolean checkExistingStudent(String admNo);
-//    @Query(value = "SELECT nextval('your_sequence_name')", nativeQuery = true)
-//    Long getNextSequenceValue();
+    @Query(value = "SELECT nextval('your_sequence_name')", nativeQuery = true)
+    Long getNextSequenceValue();
 }
