@@ -122,10 +122,10 @@ public class StudentController {
     @PostMapping("deactivate/{studentId}")
     public ResponseEntity<?> deactivateStudent(@PathVariable long studentId){
         try {
-            Student studentData = studentService.deactivateStudent(studentId);
+           studentService.deactivateStudent(studentId);
             return new ResponseEntity<>("Successfully deactivated", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity("Unable to deactivate",HttpStatus.INTERNAL_SERVER_ERROR) ;
+            return new ResponseEntity("Unable to deactivate "+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR) ;
         }
     }
 @PostMapping("/{studentId}")
