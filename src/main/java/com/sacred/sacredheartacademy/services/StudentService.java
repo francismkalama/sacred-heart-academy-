@@ -298,4 +298,10 @@ public Student updateStudent(long studentId, StudentDTO student) {
         studentRepository.save(existingStudent);
         return existingStudent;
     }
+
+    public long generateAdmissionNumber() {
+        long currentAdmValue = studentRepository.getMaxAdmissionValue();
+        logger.info("Adm Number for new Student {}",currentAdmValue+1);
+        return currentAdmValue;
+    }
 }

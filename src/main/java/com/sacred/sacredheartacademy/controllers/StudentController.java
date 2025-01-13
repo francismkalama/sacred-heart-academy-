@@ -5,6 +5,7 @@ import com.sacred.sacredheartacademy.models.*;
 import com.sacred.sacredheartacademy.models.Institution.Fees;
 import com.sacred.sacredheartacademy.models.Institution.FeesDTO;
 import com.sacred.sacredheartacademy.models.dataobjects.MonthlyTransactions;
+import com.sacred.sacredheartacademy.repositorys.StudentRepository;
 import com.sacred.sacredheartacademy.services.StudentService;
 import com.sacred.sacredheartacademy.utils.NumberConversion;
 import org.slf4j.Logger;
@@ -48,7 +49,9 @@ public class StudentController {
         student.setAddressCity(studentDTO.getAddressCity());
         student.setAddressState(studentDTO.getAddressState());
         student.setAddressPostalCode(studentDTO.getAddressPostalCode());
-        student.setAdmNo(studentDTO.getAdmNo());
+//        student.setAdmNo(studentDTO.getAdmNo());
+        long admissionNumber = studentService.generateAdmissionNumber();
+        student.setAdmNo(String.valueOf(admissionNumber+1));
         student.setDateSaved(LocalDateTime.now());
         student.setStudent_status(true);
         List<Parent> parentsData = new ArrayList<>();
