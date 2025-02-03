@@ -34,6 +34,8 @@ public class FeesHistory {
     private BigDecimal total;
     private LocalDateTime dateSaved;
     private LocalDateTime updatedDate;
+    private String studentClass;
+    private String term;
 //    private BigDecimal balance;
 //    private LocalDate dueDate;
 

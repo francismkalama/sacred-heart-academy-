@@ -65,6 +65,8 @@ public class StudentService {
                 BeanUtils.copyProperties(fees, history);
                 history.setDateSaved(LocalDateTime.now());
                 history.setUpdatedDate(LocalDateTime.now());
+                history.setStudentClass(student.getStudentClass());
+                history.setTerm(student.getTerm());
                 feesRepository.save(fees);
                 feesHistoryRepository.save(history);
                 logger.info("Fees Data saved successfully");

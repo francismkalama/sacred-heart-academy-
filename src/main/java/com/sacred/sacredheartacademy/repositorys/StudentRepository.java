@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -60,4 +61,10 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 
     @Query(value = "SELECT MAX(adm_no) FROM Students", nativeQuery = true)
     Long getMaxAdmissionValue();
+
+    @Query("""
+            select (count(s) > 0) from Student s
+            where s.firstName = ?1 and s.lastName = ?2 and s.gender = ?3""")
+    boolean studentExists(String firstName, String lastName, String gender);
+
 }
