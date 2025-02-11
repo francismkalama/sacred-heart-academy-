@@ -26,4 +26,7 @@ public class StudentDTO {
     private List<FeesDTO> fees;
     private boolean studentStatus;
     private List<EnrollmentDTO> enrollments;
+    private String extraCuricullum;
+    private String transportRoute;
+    private String transportCharge;
 }

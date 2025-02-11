@@ -30,6 +30,7 @@ public class StudentService {
     private final FeesHistoryRepository feesHistoryRepository;
     private final MonthlyTransactionsRepository monthlyTransactionsRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public StudentService(StudentRepository studentRepository, ParentRepository parentRepository, EnrollmentRepository enrollmentRepository, FeesRepository feesRepository, FeesHistoryRepository feesHistoryRepository, MonthlyTransactionsRepository monthlyTransactionsRepository) {
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
@@ -38,15 +39,16 @@ public class StudentService {
         this.feesHistoryRepository = feesHistoryRepository;
         this.monthlyTransactionsRepository = monthlyTransactionsRepository;
     }
-    public Student  addStudent(Student student, List<Parent> parentsData, List<Enrollment> enrollmentData, List<Fees> feeData) {
+
+    public Student addStudent(Student student, List<Parent> parentsData, List<Enrollment> enrollmentData, List<Fees> feeData) {
         Student savedStudent = studentRepository.save(student);
         for (Parent parent : parentsData) {
             parent.setStudent(savedStudent);
-            try{
+            try {
                 parentRepository.save(parent);
                 logger.info("Parent Data saved successfully");
-            }catch (Exception e){
-                logger.error("Error Saving parent {}",e.getMessage());
+            } catch (Exception e) {
+                logger.error("Error Saving parent {}", e.getMessage());
             }
         }
         for (Enrollment enrollment : enrollmentData) {
@@ -54,8 +56,8 @@ public class StudentService {
             try {
                 enrollmentRepository.save(enrollment);
                 logger.info("Enrollment Data saved successfully");
-            }catch (Exception e){
-                logger.error("Error Saving enrollment  {}",e.getMessage());
+            } catch (Exception e) {
+                logger.error("Error Saving enrollment  {}", e.getMessage());
             }
         }
         for (Fees fees : feeData) {
@@ -70,140 +72,153 @@ public class StudentService {
                 feesRepository.save(fees);
                 feesHistoryRepository.save(history);
                 logger.info("Fees Data saved successfully");
-            }catch (Exception e){
-                logger.error("Error Saving fees information  {}",e.getMessage());
+            } catch (Exception e) {
+                logger.error("Error Saving fees information  {}", e.getMessage());
             }
         }
         return savedStudent;
     }
+
     public StudentDTO getStudentById(long studentId) {
         StudentDTO studentDTO = new StudentDTO();
-   Student results = studentRepository.findStudentsWithParents(studentId);
-   studentDTO.setFirstName(results.getFirstName());
-   studentDTO.setLastName(results.getLastName());
-   studentDTO.setAddressState(results.getAddressState());
-   studentDTO.setAddressCity(results.getAddressCity());
-   studentDTO.setAddressPostalCode(results.getAddressPostalCode());
-   studentDTO.setAddressStreet(results.getAddressStreet());
-   studentDTO.setAdmNo(results.getAdmNo());
-   studentDTO.setGender(results.getGender());
-   studentDTO.setDateOfBirth(results.getDateOfBirth());
-   studentDTO.setDateOfAdmission(results.getDateOfAdmission());
-   studentDTO.setStudentsClass(results.getStudentClass());
-   studentDTO.setTerm(results.getTerm());
-   List<ParentDTO> rsParentDataSet = new ArrayList<>();
-   List<FeesDTO> rsFeeDataSet = new ArrayList<>();
-   List<Parent> rsParent = results.getParents();
-    List<Fees> rsFees = results.getFees();
-    for (Parent parent: rsParent){
-        ParentDTO parentDTO = new ParentDTO();
-        parentDTO.setEmail(parent.getEmail());
-        parentDTO.setRelationship(parent.getRelationship());
-        parentDTO.setPhone(parent.getPhone());
-        parentDTO.setName(parent.getName());
-        rsParentDataSet.add(parentDTO);
-    }
-    for (Fees fer: rsFees){
-        BigDecimal paidAmount = fer.getExams().add(fer.getComputer()).add(fer.getAssessment())
-                .add(fer.getExtraCurriculum()).add(fer.getTransport())
-                .add(fer.getTution()).add(fer.getAdmission()).add(fer.getLunch());
-        FeesDTO feesDTO = new FeesDTO();
-        feesDTO.setFeesAmount(fer.getFeesAmount());
-        feesDTO.setComputer(fer.getComputer());
-        feesDTO.setAssessment(fer.getAssessment());
-        feesDTO.setExams(fer.getExams());
-        feesDTO.setLunch(fer.getLunch());
+        Student results = studentRepository.findStudentsWithParents(studentId);
+        studentDTO.setFirstName(results.getFirstName());
+        studentDTO.setLastName(results.getLastName());
+        studentDTO.setAddressState(results.getAddressState());
+        studentDTO.setAddressCity(results.getAddressCity());
+        studentDTO.setAddressPostalCode(results.getAddressPostalCode());
+        studentDTO.setAddressStreet(results.getAddressStreet());
+        studentDTO.setAdmNo(results.getAdmNo());
+        studentDTO.setGender(results.getGender());
+        studentDTO.setDateOfBirth(results.getDateOfBirth());
+        studentDTO.setDateOfAdmission(results.getDateOfAdmission());
+        studentDTO.setStudentsClass(results.getStudentClass());
+        studentDTO.setTerm(results.getTerm());
+        studentDTO.setExtraCuricullum(results.getExtraCuricullum());
+        studentDTO.setTransportCharge(results.getTransportCharge());
+        studentDTO.setTransportRoute(results.getTransportRoute());
+        List<ParentDTO> rsParentDataSet = new ArrayList<>();
+        List<FeesDTO> rsFeeDataSet = new ArrayList<>();
+        List<Parent> rsParent = results.getParents();
+        List<Fees> rsFees = results.getFees();
+        for (Parent parent : rsParent) {
+            ParentDTO parentDTO = new ParentDTO();
+            parentDTO.setEmail(parent.getEmail());
+            parentDTO.setRelationship(parent.getRelationship());
+            parentDTO.setPhone(parent.getPhone());
+            parentDTO.setName(parent.getName());
+            rsParentDataSet.add(parentDTO);
+        }
+        for (Fees fer : rsFees) {
+            BigDecimal paidAmount = safeValue(fer.getExams())
+                    .add(safeValue(fer.getComputer()))
+                    .add(safeValue(fer.getAssessment()))
+                    .add(safeValue(fer.getExtraCurriculum()))
+                    .add(safeValue(fer.getTransport()))
+                    .add(safeValue(fer.getTution()))
+                    .add(safeValue(fer.getAdmission()))
+                    .add(safeValue(fer.getLunch()));
+            FeesDTO feesDTO = new FeesDTO();
+            feesDTO.setFeesAmount(fer.getFeesAmount());
+            feesDTO.setComputer(fer.getComputer());
+            feesDTO.setAssessment(fer.getAssessment());
+            feesDTO.setExams(fer.getExams());
+            feesDTO.setLunch(fer.getLunch());
 //        feesDTO.setOutstandingFees(fer.getFeesAmount().subtract(paidAmount));
-        feesDTO.setOutstandingFees(fer.getOutstandingFees());
-        feesDTO.setTransport(fer.getTransport());
-        feesDTO.setTution(fer.getTution());
-        feesDTO.setAdmission(fer.getAdmission());
-        feesDTO.setExtraCurriculum(fer.getExtraCurriculum());
-        feesDTO.setPaidAmount(paidAmount);
-        feesDTO.setAmountDesc(NumberConversion.convertBigDecimal(paidAmount)+" only");
-        rsFeeDataSet.add(feesDTO);
-         }
-    studentDTO.setParents(rsParentDataSet);
-    studentDTO.setFees(rsFeeDataSet);
+            feesDTO.setOutstandingFees(fer.getOutstandingFees());
+            feesDTO.setTransport(fer.getTransport());
+            feesDTO.setTution(fer.getTution());
+            feesDTO.setAdmission(fer.getAdmission());
+            feesDTO.setExtraCurriculum(fer.getExtraCurriculum());
+            feesDTO.setPaidAmount(paidAmount);
+            feesDTO.setAmountDesc(NumberConversion.convertBigDecimal(paidAmount) + " only");
+            rsFeeDataSet.add(feesDTO);
+        }
+        studentDTO.setParents(rsParentDataSet);
+        studentDTO.setFees(rsFeeDataSet);
         return studentDTO;
     }
 
-    public Page<Student> getStudentList(Pageable pageable){
+    public Page<Student> getStudentList(Pageable pageable) {
         return studentRepository.findAllStudents(pageable);
     }
-public Student updateStudent(long studentId, StudentDTO student) {
+
+    public Student updateStudent(long studentId, StudentDTO student) {
 //        findStudentsWithParents
 //        Student existingStudent = studentRepository.findById(studentId)        .orElseThrow(() -> new RuntimeException("Student not found"));
-    Student existingStudent = studentRepository.findStudentsWithParents(studentId);
-    existingStudent.setFirstName(student.getFirstName());
-    existingStudent.setLastName(student.getLastName());
-    existingStudent.setDateOfBirth(student.getDateOfBirth());
-    existingStudent.setDateOfAdmission(student.getDateOfAdmission());
-    existingStudent.setGender(student.getGender());
-    existingStudent.setAddressCity(student.getAddressCity());
-    existingStudent.setAddressState(student.getAddressState());
-    existingStudent.setAddressPostalCode(student.getAddressPostalCode());
-    existingStudent.setAddressStreet(student.getAddressStreet());
-    existingStudent.setStudentClass(student.getStudentsClass());
-    existingStudent.setTerm(student.getTerm());
-    existingStudent.setUpdatedDate(LocalDateTime.now());
-    List<ParentDTO> parentsList = student.getParents();
-    List<FeesDTO>feesList = student.getFees();
-    List<Parent> updatedParents = new ArrayList<>();
-    List<Fees>updatedFees = new ArrayList<>();
-    if(parentsList != null && !parentsList.isEmpty()){
-        for (ParentDTO parent:parentsList){
-            Parent parentObj = existingStudent.getParents()
-                    .stream()
-                    .filter(p -> p.getStudent().getId() == studentId) // Check for existing parent by ID
-                    .findFirst()
-                    .orElse(new Parent());
-            if (parentObj.getEmail().equals(parent.getEmail())){
-                parentObj.setName(parent.getName());
-                parentObj.setPhone(parent.getPhone());
-                parentObj.setRelationship(parent.getRelationship());
-            }else {
-                parentObj.setEmail(parent.getEmail());
-                parentObj.setName(parent.getName());
-                parentObj.setPhone(parent.getPhone());
-                parentObj.setRelationship(parent.getRelationship());
+        Student existingStudent = studentRepository.findStudentsWithParents(studentId);
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setDateOfBirth(student.getDateOfBirth());
+        existingStudent.setDateOfAdmission(student.getDateOfAdmission());
+        existingStudent.setGender(student.getGender());
+        existingStudent.setAddressCity(student.getAddressCity());
+        existingStudent.setAddressState(student.getAddressState());
+        existingStudent.setAddressPostalCode(student.getAddressPostalCode());
+        existingStudent.setAddressStreet(student.getAddressStreet());
+        existingStudent.setStudentClass(student.getStudentsClass());
+        existingStudent.setTerm(student.getTerm());
+        existingStudent.setUpdatedDate(LocalDateTime.now());
+        existingStudent.setExtraCuricullum(student.getExtraCuricullum());
+        existingStudent.setTransportCharge(student.getTransportCharge());
+        existingStudent.setTransportRoute(student.getTransportRoute());
+        List<ParentDTO> parentsList = student.getParents();
+        List<FeesDTO> feesList = student.getFees();
+        List<Parent> updatedParents = new ArrayList<>();
+        List<Fees> updatedFees = new ArrayList<>();
+        if (parentsList != null && !parentsList.isEmpty()) {
+            for (ParentDTO parent : parentsList) {
+                Parent parentObj = existingStudent.getParents()
+                        .stream()
+                        .filter(p -> p.getStudent().getId() == studentId) // Check for existing parent by ID
+                        .findFirst()
+                        .orElse(new Parent());
+                if (parentObj.getEmail().equals(parent.getEmail())) {
+                    parentObj.setName(parent.getName());
+                    parentObj.setPhone(parent.getPhone());
+                    parentObj.setRelationship(parent.getRelationship());
+                } else {
+                    parentObj.setEmail(parent.getEmail());
+                    parentObj.setName(parent.getName());
+                    parentObj.setPhone(parent.getPhone());
+                    parentObj.setRelationship(parent.getRelationship());
+                }
+                updatedParents.add(parentObj);
+
             }
-            updatedParents.add(parentObj);
 
         }
+        if (feesList != null && !feesList.isEmpty()) {
+            for (FeesDTO feesDTO : feesList) {
+                BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
+                        .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
+                        .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
+                Fees fees = existingStudent.getFees()
+                        .stream()
+                        .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
+                        .findFirst()
+                        .orElse(new Fees());
+                fees.setExtraCurriculum(feesDTO.getExtraCurriculum());
+                fees.setAdmission(feesDTO.getAdmission());
+                fees.setAssessment(feesDTO.getAssessment());
+                fees.setLunch(feesDTO.getLunch());
+                fees.setTution(feesDTO.getTution());
+                fees.setFeesAmount(feesDTO.getFeesAmount());
+                fees.setExams(feesDTO.getExams());
+                fees.setComputer(feesDTO.getComputer());
 
-    }
-    if(feesList != null && !feesList.isEmpty()){
-        for (FeesDTO feesDTO:feesList){
-            BigDecimal paidAmount = feesDTO.getExams().add(feesDTO.getComputer()).add(feesDTO.getAssessment())
-                    .add(feesDTO.getExtraCurriculum()).add(feesDTO.getTransport())
-                    .add(feesDTO.getTution()).add(feesDTO.getAdmission()).add(feesDTO.getLunch());
-            Fees fees = existingStudent.getFees()
-                    .stream()
-                    .filter(f -> f.getStudent().getId() == studentId) // Check for existing parent by ID
-                    .findFirst()
-                    .orElse(new Fees());
-            fees.setExtraCurriculum(feesDTO.getExtraCurriculum());
-            fees.setAdmission(feesDTO.getAdmission());
-            fees.setAssessment(feesDTO.getAssessment());
-            fees.setLunch(feesDTO.getLunch());
-            fees.setTution(feesDTO.getTution());
-            fees.setFeesAmount(feesDTO.getFeesAmount());
-            fees.setExams(feesDTO.getExams());
-            fees.setComputer(feesDTO.getComputer());
-
-            if(feesDTO.getOutstandingFees().compareTo(BigDecimal.ZERO) == 0){
-                logger.info("Balance before  zero {}",feesDTO.getOutstandingFees());
-                fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
-                logger.info("Balance After {}",fees.getOutstandingFees());
-            }else if(feesDTO.getOutstandingFees().compareTo(BigDecimal.ZERO) == -1){
-                logger.info("Balance less than  zero {}",feesDTO.getOutstandingFees());
-                fees.setOutstandingFees(feesDTO.getOutstandingFees().add(paidAmount));
-                logger.info("Balance After {}",fees.getOutstandingFees());
-            }else{
-                logger.info("Balance greater that  zero {}",feesDTO.getOutstandingFees());
-                fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
-                logger.info("Balance After {}",fees.getOutstandingFees());
+                if (feesDTO.getOutstandingFees().compareTo(BigDecimal.ZERO) == 0) {
+                    logger.info("Balance before  zero {}", feesDTO.getOutstandingFees());
+                    fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
+                    logger.info("Balance After {}", fees.getOutstandingFees());
+                } else if (feesDTO.getOutstandingFees().compareTo(BigDecimal.ZERO) == -1) {
+                    logger.info("Balance less than  zero {}", feesDTO.getOutstandingFees());
+                    fees.setOutstandingFees(feesDTO.getOutstandingFees().add(paidAmount));
+                    logger.info("Balance After {}", fees.getOutstandingFees());
+                } else {
+                    logger.info("Balance greater that  zero {}", feesDTO.getOutstandingFees());
+                    fees.setOutstandingFees(feesDTO.getFeesAmount().subtract(paidAmount));
+                    logger.info("Balance After {}", fees.getOutstandingFees());
 
 
 //            if(feesDTO.getOutstandingFees().compareTo(BigDecimal.ZERO) == 0){
@@ -224,17 +239,17 @@ public Student updateStudent(long studentId, StudentDTO student) {
 //                }
 
 
-                logger.info("Outstanding Balance {}",feesDTO.getOutstandingFees());
+                    logger.info("Outstanding Balance {}", feesDTO.getOutstandingFees());
+                }
+                fees.setTransport(feesDTO.getTransport());
+                fees.setTotal(paidAmount);
+                fees.setUpdatedDate(LocalDateTime.now());
+                updatedFees.add(fees);
+                saveHistory(fees);
+
             }
-            fees.setTransport(feesDTO.getTransport());
-            fees.setTotal(paidAmount);
-            fees.setUpdatedDate(LocalDateTime.now());
-            updatedFees.add(fees);
-            saveHistory(fees);
 
         }
-
-    }
 //
 //    if (student.getParents()!=null){
 //        List<Parent> parentsData = student.getParents().stream()
@@ -249,11 +264,11 @@ public Student updateStudent(long studentId, StudentDTO student) {
 //                        .orElseThrow(() -> new RuntimeException("Parent not found: " + enrollment.getEnrollmentId())))
 //                .collect(Collectors.toList());
 //    }
-    existingStudent.setParents(updatedParents);
-    existingStudent.setFees(updatedFees);
+        existingStudent.setParents(updatedParents);
+        existingStudent.setFees(updatedFees);
 
-    return studentRepository.save(existingStudent);
-}
+        return studentRepository.save(existingStudent);
+    }
 
     private void saveHistory(Fees fee) {
         FeesHistory history = new FeesHistory();
@@ -269,6 +284,8 @@ public Student updateStudent(long studentId, StudentDTO student) {
         history.setTransport(fee.getTransport());
         history.setTotal(fee.getTotal());
         history.setStudent(fee.getStudent());
+        history.setTerm(fee.getStudent().getTerm());
+        history.setStudentClass(fee.getStudent().getStudentClass());
         history.setUpdatedDate(LocalDateTime.now());
         history.setDateSaved(LocalDateTime.now());
         feesHistoryRepository.save(history);
@@ -279,15 +296,19 @@ public Student updateStudent(long studentId, StudentDTO student) {
     }
 
     public long getStudentCountbyMonth(int monthValue, int year) {
-        return studentRepository.countStudentByAdmMonth(monthValue,year);
+        return studentRepository.countStudentByAdmMonth(monthValue, year);
     }
 
-    public List<MonthlyTransactions> getMonthlyTransations(String year){
+    public List<MonthlyTransactions> getMonthlyTransations(String year) {
         return monthlyTransactionsRepository.findByYear(Long.valueOf(year));
     }
 
     public Page<List<Student>> getStudentWithAdmNo(Pageable pageable, String admNo) {
-        return studentRepository.findStudentBySearchIgnoreCase(pageable,admNo);
+        return studentRepository.findStudentBySearchIgnoreCase(pageable, admNo);
+    }
+
+    public Page<FeesHistory> getStudentFeeHistory(Pageable pageable, Long id) {
+        return feesHistoryRepository.findByStudent_Id(id, pageable);
     }
 
     public boolean checkAdmissionNumber(String admissionNumber) {
@@ -303,7 +324,10 @@ public Student updateStudent(long studentId, StudentDTO student) {
 
     public long generateAdmissionNumber() {
         long currentAdmValue = studentRepository.getMaxAdmissionValue();
-        logger.info("Adm Number for new Student {}",currentAdmValue+1);
+        logger.info("Adm Number for new Student {}", currentAdmValue + 1);
         return currentAdmValue;
+    }
+    private static BigDecimal safeValue(BigDecimal value) {
+        return Objects.requireNonNullElse(value, BigDecimal.ZERO);
     }
 }

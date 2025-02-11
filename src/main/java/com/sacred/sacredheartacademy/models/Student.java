@@ -57,6 +57,12 @@ public class Student {
     private LocalDateTime dateSaved;
     private LocalDateTime updatedDate;
     private boolean student_status;
+    @Column(name = "extra_curicullum")
+    private String extraCuricullum;
+    @Column(name = "transport_route")
+    private String transportRoute;
+    @Column(name = "transport_charge")
+    private String transportCharge;
 //    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    private List<Grade> grades;
 //    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

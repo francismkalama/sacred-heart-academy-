@@ -16,7 +16,7 @@ public class FeesHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fees_id")
     private long feeId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id")
     @JsonIgnore
     private Student student;

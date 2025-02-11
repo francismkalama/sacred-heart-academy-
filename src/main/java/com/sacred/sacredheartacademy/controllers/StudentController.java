@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sacred.sacredheartacademy.models.*;
 import com.sacred.sacredheartacademy.models.Institution.Fees;
 import com.sacred.sacredheartacademy.models.Institution.FeesDTO;
+import com.sacred.sacredheartacademy.models.Institution.FeesHistory;
 import com.sacred.sacredheartacademy.models.dataobjects.MonthlyTransactions;
 import com.sacred.sacredheartacademy.models.dataobjects.StudentReport;
 import com.sacred.sacredheartacademy.repositorys.StudentRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -227,6 +229,12 @@ public class StudentController {
             studentsCount = studentService.getStudentCount();
         }
         return ResponseEntity.ok(studentsCount);
+    }
+
+    @GetMapping("/student_fee_history/{student}")
+    public ResponseEntity<Page<FeesHistory>> getStudentsCount(@PathVariable String student, @PageableDefault Pageable pageable) {
+
+        return ResponseEntity.ok(studentService.getStudentFeeHistory(pageable, Long.valueOf(student)));
     }
 
     @GetMapping("/monthly/{year}")
