@@ -59,7 +59,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM Students s WHERE s.adm_no = :admNo and s.student_status=true", nativeQuery = true)
     boolean checkExistingStudent(String admNo);
 
-    @Query(value = "SELECT MAX(adm_no) FROM Students", nativeQuery = true)
+    @Query(value = "SELECT MAX(adm_no::NUMERIC) FROM Students", nativeQuery = true)
     Long getMaxAdmissionValue();
 
     @Query("""
